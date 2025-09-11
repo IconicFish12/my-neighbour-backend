@@ -47,7 +47,10 @@ __decorate([
     __metadata("design:type", Date)
 ], CreateSecurityManageDto.prototype, "incidentDate", void 0);
 __decorate([
-    (0, class_validator_1.IsEnum)(prisma_1.MaintenanceStatus, { message: 'Status laporan tidak valid.' }),
+    (0, class_validator_1.IsEnum)(prisma_1.MaintenanceStatus, {
+        message: 'Status laporan tidak valid. Pilihan: ' +
+            Object.values(prisma_1.MaintenanceStatus).join(', '),
+    }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Status laporan tidak boleh kosong.' }),
     __metadata("design:type", String)
 ], CreateSecurityManageDto.prototype, "status", void 0);

@@ -47,8 +47,12 @@ export class CreateUnitManageDto {
   @IsNotEmpty({ message: 'Lokasi Tidak boleh kosong' })
   readonly location: string;
 
-  @IsEnum(UnitStatus, { message: 'Status unit tidak valid.' })
-  @IsNotEmpty({ message: 'Status unit tidak boleh kosong.' })
+  @IsEnum(UnitStatus, {
+    message:
+      'Status unit tidak valid. Pilihan: ' +
+      Object.values(UnitStatus).join(', '),
+  })
+  @IsOptional()
   readonly status: UnitStatus;
 
   @IsNumber({}, { message: 'Harga jual harus berupa angka.' })

@@ -67,8 +67,11 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUnitManageDto.prototype, "location", void 0);
 __decorate([
-    (0, class_validator_1.IsEnum)(prisma_1.UnitStatus, { message: 'Status unit tidak valid.' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Status unit tidak boleh kosong.' }),
+    (0, class_validator_1.IsEnum)(prisma_1.UnitStatus, {
+        message: 'Status unit tidak valid. Pilihan: ' +
+            Object.values(prisma_1.UnitStatus).join(', '),
+    }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateUnitManageDto.prototype, "status", void 0);
 __decorate([

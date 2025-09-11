@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Transform, Type } from 'class-transformer';
 import {
@@ -18,11 +17,7 @@ import {
   IsArray,
   IsStrongPassword,
 } from 'class-validator';
-import {
-  Gender,
-  ResidentStatus,
-  UserRole,
-} from '../../common/database/generated/prisma';
+import { Gender, ResidentStatus } from '../../common/database/generated/prisma';
 import { IsUnique } from '../../common/pipes/validators/is-unique-validators';
 
 export enum RegistrationMethod {
@@ -78,12 +73,6 @@ export class RegistRequest {
   @Type(() => Date)
   readonly dateOfBirth: Date;
 
-  @IsNotEmpty({ message: 'Peran tidak boleh kosong' })
-  @IsEnum(UserRole, {
-    message: 'Peran tidak valid: ' + Object.values(UserRole).join(', '),
-  })
-  readonly role: UserRole;
-
   @IsNotEmpty({ message: 'Jenis kelamin tidak boleh kosong' })
   @IsEnum(Gender, {
     message: 'Jenis kelamin tidak valid: ' + Object.values(Gender).join(', '),
@@ -115,7 +104,7 @@ export class RegistRequest {
   @IsEnum(ResidentStatus, {
     message:
       'Status penghuni tidak valid. Pilihan: ' +
-      Object.values(ResidentStatus).join(', '),
+      Object.values(ResidentStatus).join(', ').toLowerCase(),
   })
   readonly residentType: ResidentStatus;
 
@@ -123,7 +112,7 @@ export class RegistRequest {
   @IsEnum(RegistrationMethod, {
     message:
       'metode registrasi tidak valid. Pilihan: ' +
-      Object.values(ResidentStatus).join(', '),
+      Object.values(RegistrationMethod).join(', '),
   })
   registrationMethod: RegistrationMethod;
 
@@ -141,36 +130,48 @@ export class RegistRequest {
   @Type(() => Date)
   readonly movedInDate: Date;
 
-  @ValidateIf((o) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD)
-  @IsString({ message: 'Nama kontak darurat harus berupa teks.' })
+  @ValidateIf(
+    (o: RegistRequest) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD,
+  )
+  @IsString({ message: 'ID Unit harus berupa teks.' })
   @IsUUID('4', {
     message: 'ID Unit Hunian harus berupa UUID versi 4 yang valid.',
   })
   @IsNotEmpty({ message: 'ID Unit hunian tidak boleh kosong' })
   unitId: string;
 
-  @ValidateIf((o) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD)
+  @ValidateIf(
+    (o: RegistRequest) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD,
+  )
   @IsOptional({ message: 'Biaya cicilan unit hunain bersifat opsional' })
   @Transform(({ value }) => parseFloat(value))
   kprPaymentAmount?: number;
 
-  @ValidateIf((o) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD)
+  @ValidateIf(
+    (o: RegistRequest) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD,
+  )
   @IsOptional()
   @IsDateString()
   kprDueDate?: string;
 
-  @ValidateIf((o) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD)
+  @ValidateIf(
+    (o: RegistRequest) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD,
+  )
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   isKprPaid?: boolean;
 
-  @ValidateIf((o) => o.residentType === ResidentStatus.FAMILY_MEMBERS)
+  @ValidateIf(
+    (o: RegistRequest) => o.residentType === ResidentStatus.FAMILY_MEMBERS,
+  )
   @IsNotEmpty()
   @IsString()
   familyCode?: string;
 
-  @ValidateIf((o) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD)
+  @ValidateIf(
+    (o: RegistRequest) => o.residentType === ResidentStatus.HEAD_HOUSE_HOLD,
+  )
   @IsOptional()
   @IsArray()
   @IsString({ each: true })

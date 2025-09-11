@@ -26,17 +26,14 @@ import { OperationalReportModule } from './modules/reports-module/operational-re
 import { PaymentsReportModule } from './modules/reports-module/payments-report-module/payments-report.module';
 import { RequestManageModule } from './modules/request-module/request-manage.module';
 import { ComplaintManageModule } from './modules/request-module/compliant-module/complaint-manage.module';
-import { UploadFilesModule } from './common/helper/uploads/uploads.module';
 import { HelperModule } from './common/helper/helper.module';
 
 @Module({
   imports: [
-    UploadFilesModule,
     HelperModule,
     DatabaseModule,
     BackendApiModule,
     AuthModule,
-    MailerManageModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

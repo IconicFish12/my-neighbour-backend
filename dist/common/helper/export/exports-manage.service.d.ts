@@ -24,6 +24,4 @@ export declare class ExportsManageService implements OnModuleInit, OnModuleDestr
     private isLatePayment;
     private analyzePaymentsByBillType;
     private analyzePaymentsByMethod;
-    private getDefaultOperationalTemplate;
-    private getDefaultPaymentTemplate;
 }

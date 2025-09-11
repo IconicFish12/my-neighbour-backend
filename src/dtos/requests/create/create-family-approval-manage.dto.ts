@@ -26,7 +26,8 @@ export class CreateFamilyApprovalManageDto {
 
   @IsNotEmpty({ message: 'Peran tidak boleh kosong' })
   @IsEnum(ApprovalStatus, {
-    message: 'Peran tidak valid: ' + Object.values(ApprovalStatus).join(', '),
+    message:
+      'Peran tidak valid. Pilihan: ' + Object.values(ApprovalStatus).join(', '),
   })
   readonly status: ApprovalStatus;
 }

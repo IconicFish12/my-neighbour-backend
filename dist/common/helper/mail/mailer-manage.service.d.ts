@@ -4,6 +4,7 @@ export declare class MailerManageService {
     private readonly mailService;
     private readonly logger;
     constructor(mailService: MailerService);
+    private sendMailWithRetry;
     sendHeadOfHouseholdVerificationEmail(data: RegistrationEmailData): Promise<boolean>;
     sendDocumentVerificationRequestToAdmin(data: DocumentVerificationData): Promise<boolean>;
     sendHeadOfHouseholdWelcomeEmail(data: WelcomeEmailData): Promise<boolean>;

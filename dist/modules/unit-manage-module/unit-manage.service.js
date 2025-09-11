@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const database_service_1 = require("../../common/database/database.service");
 const generalHelper_1 = require("../../common/helper/generalHelper");
 const library_1 = require("../../common/database/generated/prisma/runtime/library");
+const prisma_1 = require("../../common/database/generated/prisma/index.js");
 let UnitManageService = class UnitManageService {
     prisma;
     helper;
@@ -29,8 +30,8 @@ let UnitManageService = class UnitManageService {
                     buildingName: createRequest.buildingName ?? null,
                     location: createRequest.location,
                     priceSale: this.helper.twoDecimal(createRequest.priceSale),
-                    status: createRequest.status,
                     floorNumber: createRequest.floorNumber ?? null,
+                    status: prisma_1.UnitStatus.AVAILABLE,
                     numberOfRooms: createRequest.numberOfRooms ?? null,
                     squareFootage: createRequest.squareFootage ?? null,
                 },
@@ -88,13 +89,6 @@ let UnitManageService = class UnitManageService {
                         orderBy: { title: 'asc' },
                     },
                     Residents: {
-                        select: {
-                            isKprPaid: true,
-                            kprDueDate: true,
-                            kprPaymentAmount: true,
-                            residentStatus: true,
-                            movedInDate: true,
-                        },
                         include: {
                             user: {
                                 select: {

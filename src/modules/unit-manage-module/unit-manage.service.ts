@@ -8,6 +8,7 @@ import { UpdateUnitManageDto } from '../../dtos/requests/update/update-unit-mana
 import { DatabaseService } from '../../common/database/database.service';
 import { GeneralHelper } from '../../common/helper/generalHelper';
 import { PrismaClientKnownRequestError } from '../../common/database/generated/prisma/runtime/library';
+import { UnitStatus } from 'src/common/database/generated/prisma';
 
 @Injectable()
 export class UnitManageService {
@@ -23,8 +24,8 @@ export class UnitManageService {
           buildingName: createRequest.buildingName ?? null,
           location: createRequest.location,
           priceSale: this.helper.twoDecimal(createRequest.priceSale),
-          status: createRequest.status,
           floorNumber: createRequest.floorNumber ?? null,
+          status: UnitStatus.AVAILABLE,
           numberOfRooms: createRequest.numberOfRooms ?? null,
           squareFootage: createRequest.squareFootage ?? null,
         },
@@ -86,13 +87,6 @@ export class UnitManageService {
             orderBy: { title: 'asc' },
           },
           Residents: {
-            select: {
-              isKprPaid: true,
-              kprDueDate: true,
-              kprPaymentAmount: true,
-              residentStatus: true,
-              movedInDate: true,
-            },
             include: {
               user: {
                 select: {

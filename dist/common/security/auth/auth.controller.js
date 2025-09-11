@@ -19,7 +19,7 @@ const regist_request_1 = require("../../../dtos/requests/regist-request");
 const platform_express_1 = require("@nestjs/platform-express");
 const sign_in_request_1 = require("../../../dtos/requests/sign-in-request");
 const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
-const database_service_1 = require("../../database/database.service");
+const database_service_1 = require("../../../common/database/database.service");
 let AuthController = class AuthController {
     authService;
     prisma;

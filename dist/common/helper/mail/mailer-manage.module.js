@@ -31,21 +31,23 @@ exports.MailerManageModule = MailerManageModule = __decorate([
                 useFactory: (configService) => ({
                     transport: {
                         host: configService.get('MAIL_HOST', 'smtp.gmail.com'),
-                        port: configService.get('MAIL_PORT', 587),
-                        secure: configService.get('MAIL_PORT', 587) === 465,
+                        port: configService.get('MAIL_PORT', 465),
+                        secure: true,
                         auth: {
-                            user: configService.get('MAIL_USER'),
+                            user: configService.get('MAIL_USERNAME'),
                             pass: configService.get('MAIL_PASSWORD'),
                         },
-                        tls: {
-                            rejectUnauthorized: false,
-                        },
+                        pool: true,
+                        maxConnections: 5,
+                        maxMessages: 100,
+                        rateDelta: 20000,
+                        rateLimit: 5,
                     },
                     defaults: {
-                        from: configService.get('MAIL_FROM_NAME', 'noreply@example.com'),
+                        from: `"${configService.get('MAIL_FROM_NAME', 'No Reply')}" <${configService.get('MAIL_USERNAME')}>`,
                     },
                     template: {
-                        dir: path.join(__dirname, '../templates'),
+                        dir: path.join(__dirname, '../mail/templates'),
                         adapter: new pug_adapter_1.PugAdapter(),
                         options: {
                             strict: true,

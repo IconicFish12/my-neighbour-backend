@@ -33,6 +33,7 @@ exports.ReportsManageModule = ReportsManageModule = __decorate([
             contact_manage_module_1.ContactManageModule,
             communication_module_1.CommunicationModule,
             financial_module_1.FinancialModule,
+            payments_report_module_1.PaymentsReportModule,
         ],
         exports: [operational_report_module_1.OperationalReportModule, payments_report_module_1.PaymentsReportModule],
     })

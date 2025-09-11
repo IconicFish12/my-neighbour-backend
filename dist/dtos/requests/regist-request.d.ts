@@ -1,4 +1,4 @@
-import { Gender, ResidentStatus, UserRole } from '../../common/database/generated/prisma';
+import { Gender, ResidentStatus } from '../../common/database/generated/prisma';
 export declare enum RegistrationMethod {
     ADMIN_DRIVEN = "ADMIN_DRIVEN",
     USER_DRIVEN = "USER_DRIVEN"
@@ -10,7 +10,6 @@ export declare class RegistRequest {
     readonly username: string;
     readonly password: string;
     readonly dateOfBirth: Date;
-    readonly role: UserRole;
     readonly gender: Gender;
     readonly contactNumber: string;
     readonly primaryEmail: string;

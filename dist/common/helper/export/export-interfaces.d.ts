@@ -17,19 +17,22 @@ export interface UnitStatistic {
     unitsByStatus: StatusStatistic[];
 }
 export interface PaymentHistoryItem {
-    paymentMethod: string;
-    status: any;
+    paymentMethod?: string;
+    status?: string;
     paymentDate: Date;
     amount: number;
     resident?: {
         user?: {
             fullName: string;
         };
+        unit?: {
+            number: string;
+        };
     };
     bill?: {
         type: string;
-        dueDate: Date;
-    };
+        dueDate?: Date;
+    } | null;
 }
 export interface ReportData {
     title: string;

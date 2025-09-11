@@ -418,7 +418,8 @@ exports.ComplaintStatus = exports.$Enums.ComplaintStatus = {
 exports.UnitStatus = exports.$Enums.UnitStatus = {
   OCCUPIED: 'OCCUPIED',
   VACANT: 'VACANT',
-  MAINTENANCE: 'MAINTENANCE'
+  MAINTENANCE: 'MAINTENANCE',
+  AVAILABLE: 'AVAILABLE'
 };
 
 exports.PaymentType = exports.$Enums.PaymentType = {

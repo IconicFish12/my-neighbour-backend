@@ -43,7 +43,8 @@ export class CreateEmployeeManageDto {
   @IsNotEmpty({ message: 'Posisi Pegawai tidak boleh kosong.' })
   @IsEnum(EmployeeRole, {
     message:
-      'Posisi Pegawai tidak valid.' + Object.values(EmployeeRole).join(', '),
+      'Posisi Pegawai tidak valid. Pilihan' +
+      Object.values(EmployeeRole).join(', '),
   })
   readonly employeePosition: EmployeeRole;
 

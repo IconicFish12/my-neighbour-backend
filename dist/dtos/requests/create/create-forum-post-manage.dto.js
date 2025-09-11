@@ -60,7 +60,8 @@ __decorate([
 ], CreateForumPostManageDto.prototype, "attachments", void 0);
 __decorate([
     (0, class_validator_1.IsEnum)(prisma_1.UserRole, {
-        message: 'Peran Penulis tidak valid : ' + Object.values(prisma_1.UserRole).join(','),
+        message: 'Peran Penulis tidak valid. Pilihan: ' +
+            Object.values(prisma_1.UserRole).join(','),
     }),
     (0, class_validator_1.IsOptional)({ message: 'Peran Penulis bersifat Optional' }),
     __metadata("design:type", String)

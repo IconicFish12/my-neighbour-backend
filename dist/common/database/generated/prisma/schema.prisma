@@ -45,6 +45,7 @@ enum UnitStatus {
   OCCUPIED
   VACANT
   MAINTENANCE
+  AVAILABLE
 }
 
 enum PaymentStatus {
@@ -347,7 +348,7 @@ model Units {
   priceSale     Float      @map("harga_jual")
   squareFootage Int?       @map("ukuran_unit")
   location      String     @map("lokasi_unit")
-  status        UnitStatus
+  status        UnitStatus @default(AVAILABLE) @map("status_unit")
   createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamp()
   updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamp()
 

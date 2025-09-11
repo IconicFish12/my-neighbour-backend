@@ -26,7 +26,6 @@ class RegistRequest {
     username;
     password;
     dateOfBirth;
-    role;
     gender;
     contactNumber;
     primaryEmail;
@@ -91,13 +90,6 @@ __decorate([
     __metadata("design:type", Date)
 ], RegistRequest.prototype, "dateOfBirth", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'Peran tidak boleh kosong' }),
-    (0, class_validator_1.IsEnum)(prisma_1.UserRole, {
-        message: 'Peran tidak valid: ' + Object.values(prisma_1.UserRole).join(', '),
-    }),
-    __metadata("design:type", String)
-], RegistRequest.prototype, "role", void 0);
-__decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Jenis kelamin tidak boleh kosong' }),
     (0, class_validator_1.IsEnum)(prisma_1.Gender, {
         message: 'Jenis kelamin tidak valid: ' + Object.values(prisma_1.Gender).join(', '),
@@ -125,7 +117,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Status penghuni tidak boleh kosong.' }),
     (0, class_validator_1.IsEnum)(prisma_1.ResidentStatus, {
         message: 'Status penghuni tidak valid. Pilihan: ' +
-            Object.values(prisma_1.ResidentStatus).join(', '),
+            Object.values(prisma_1.ResidentStatus).join(', ').toLowerCase(),
     }),
     __metadata("design:type", String)
 ], RegistRequest.prototype, "residentType", void 0);
@@ -133,7 +125,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'metode registrasi tidak boleh kosong' }),
     (0, class_validator_1.IsEnum)(RegistrationMethod, {
         message: 'metode registrasi tidak valid. Pilihan: ' +
-            Object.values(prisma_1.ResidentStatus).join(', '),
+            Object.values(RegistrationMethod).join(', '),
     }),
     __metadata("design:type", String)
 ], RegistRequest.prototype, "registrationMethod", void 0);
@@ -156,7 +148,7 @@ __decorate([
 ], RegistRequest.prototype, "movedInDate", void 0);
 __decorate([
     (0, class_validator_1.ValidateIf)((o) => o.residentType === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD),
-    (0, class_validator_1.IsString)({ message: 'Nama kontak darurat harus berupa teks.' }),
+    (0, class_validator_1.IsString)({ message: 'ID Unit harus berupa teks.' }),
     (0, class_validator_1.IsUUID)('4', {
         message: 'ID Unit Hunian harus berupa UUID versi 4 yang valid.',
     }),

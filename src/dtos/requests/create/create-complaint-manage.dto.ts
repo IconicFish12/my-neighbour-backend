@@ -10,6 +10,7 @@ import {
 import {
   ComplaintStatus,
   MaintenanceCategory,
+  MaintenanceStatus,
 } from '../../../common/database/generated/prisma';
 import { Type } from 'class-transformer';
 
@@ -22,13 +23,21 @@ export class CreateComplaintManageDto {
   @IsNotEmpty({ message: 'Deskripsi keluhan tidak boleh kosong.' })
   readonly description: string;
 
-  @IsEnum(MaintenanceCategory, { message: 'Kategori kerusakan tidak valid.' })
+  @IsEnum(MaintenanceCategory, {
+    message:
+      'Kategori kerusakan tidak valid. Pilihan' +
+      Object.values(MaintenanceCategory).join(', '),
+  })
   @IsNotEmpty({
     message: 'Kategori kerusakan (ringan/sedang/berat) tidak boleh kosong.',
   })
   readonly category: MaintenanceCategory;
 
-  @IsEnum(ComplaintStatus, { message: 'Status keluhan tidak valid.' })
+  @IsEnum(ComplaintStatus, {
+    message:
+      'Status keluhan tidak valid.Pilihan' +
+      Object.values(MaintenanceStatus).join(', '),
+  })
   @IsNotEmpty({ message: 'Status keluhan tidak boleh kosong.' })
   readonly status: ComplaintStatus;
 

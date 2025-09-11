@@ -114,7 +114,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Jenis kelamin tidak boleh kosong' }),
     (0, class_validator_1.IsEnum)(prisma_1.Gender, {
-        message: 'Jenis kelamin tidak valid: ' + Object.values(prisma_1.Gender).join(', '),
+        message: 'Jenis kelamin tidak valid, Pilihan: ' + Object.values(prisma_1.Gender).join(', '),
     }),
     __metadata("design:type", String)
 ], CreateAppUserManageDto.prototype, "gender", void 0);

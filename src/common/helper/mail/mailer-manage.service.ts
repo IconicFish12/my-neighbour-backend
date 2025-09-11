@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger } from '@nestjs/common';
 import {
@@ -12,11 +13,37 @@ export class MailerManageService {
   private readonly logger = new Logger(MailerManageService.name);
   constructor(private readonly mailService: MailerService) {}
 
+  // ✅ Retry mechanism untuk handle socket close
+  private async sendMailWithRetry(
+    mailOptions: any,
+    maxRetries: number = 3,
+    delay: number = 1000,
+  ): Promise<void> {
+    let lastError: Error;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await this.mailService.sendMail(mailOptions);
+        return; // Success, exit retry loop
+      } catch (error) {
+        lastError = error as Error;
+        this.logger.warn(
+          `Email send attempt ${attempt}/${maxRetries} failed: ${lastError.message}`,
+        );
+
+        if (attempt < maxRetries) {
+          // Wait before retry
+          await new Promise((resolve) => setTimeout(resolve, delay * attempt));
+        }
+      }
+    }
+  }
+
   async sendHeadOfHouseholdVerificationEmail(
     data: RegistrationEmailData,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.email,
         subject:
           'Verifikasi Registrasi Kepala Keluarga - ' +
@@ -39,6 +66,7 @@ export class MailerManageService {
       this.logger.error(
         `Gagal mengirim email verifikasi kepala rumah tangga: ${(error as Error).message}`,
       );
+      this.logger.error(`Stack trace: ${(error as Error).stack}`);
       return false;
     }
   }
@@ -47,7 +75,7 @@ export class MailerManageService {
     data: DocumentVerificationData,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.adminEmail,
         subject: `Review Dokumen - ${data.applicantName}`,
         template: 'reviewDocument',
@@ -62,7 +90,7 @@ export class MailerManageService {
       });
 
       this.logger.log(
-        `Permintaan verifikasi dokumen dikirim ke admin${data.adminEmail}`,
+        `Permintaan verifikasi dokumen dikirim ke admin ${data.adminEmail}`,
       );
       return true;
     } catch (error) {
@@ -77,7 +105,7 @@ export class MailerManageService {
     data: WelcomeEmailData,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.email,
         subject: 'Selamat Datang! Registrasi Berhasil',
         template: 'emailWelcome',
@@ -107,7 +135,7 @@ export class MailerManageService {
     data: RegistrationEmailData,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.email,
         subject: 'Verifikasi Registrasi Anggota Keluarga',
         template: 'emailVerification',
@@ -136,7 +164,7 @@ export class MailerManageService {
     data: FamilyMemberNotificationData,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.headOfHouseholdEmail,
         subject: 'Persetujuan Diperlukan - Anggota Keluarga Baru',
         template: 'family-member-approval-notification',
@@ -158,13 +186,14 @@ export class MailerManageService {
       this.logger.error(
         `Failed to send family member approval notification: ${(error as Error).message}`,
       );
+      this.logger.error(`Stack trace: ${(error as Error).stack}`);
       return false;
     }
   }
 
   async sendFamilyMemberWelcomeEmail(data: WelcomeEmailData): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.email,
         subject: 'Selamat Datang! Registrasi Anggota Keluarga Berhasil',
         template: 'emailWelcome',
@@ -184,6 +213,7 @@ export class MailerManageService {
       this.logger.error(
         `Failed to send family member welcome email: ${(error as Error).message}`,
       );
+      this.logger.error(`Stack trace: ${(error as Error).stack}`);
       return false;
     }
   }
@@ -192,7 +222,7 @@ export class MailerManageService {
     data: RegistrationEmailData,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.email,
         subject:
           'Akun Anda Telah Dibuat - ' +
@@ -215,6 +245,7 @@ export class MailerManageService {
       this.logger.error(
         `Failed to send admin-driven head of household email: ${(error as Error).message}`,
       );
+      this.logger.error(`Stack trace: ${(error as Error).stack}`);
       return false;
     }
   }
@@ -223,7 +254,7 @@ export class MailerManageService {
     data: RegistrationEmailData,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: data.email,
         subject: 'Akun Anggota Keluarga Telah Dibuat',
         template: 'admin-driven-family-member',
@@ -241,6 +272,7 @@ export class MailerManageService {
       this.logger.error(
         `Failed to send admin-driven family member email: ${(error as Error).message}`,
       );
+      this.logger.error(`Stack trace: ${(error as Error).stack}`);
       return false;
     }
   }
@@ -252,7 +284,7 @@ export class MailerManageService {
     reason?: string,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: familyMemberEmail,
         subject: 'Registrasi Ditolak',
         template: 'rejectApproval',
@@ -272,6 +304,7 @@ export class MailerManageService {
       this.logger.error(
         `Failed to send family member rejection notification: ${(error as Error).message}`,
       );
+      this.logger.error(`Stack trace: ${(error as Error).stack}`);
       return false;
     }
   }
@@ -282,7 +315,7 @@ export class MailerManageService {
     documentType: string,
   ): Promise<boolean> {
     try {
-      await this.mailService.sendMail({
+      await this.sendMailWithRetry({
         to: applicantEmail,
         subject: `Dokumen ${documentType} Telah Diverifikasi`,
         template: 'document-approval',
@@ -301,6 +334,7 @@ export class MailerManageService {
       this.logger.error(
         `Failed to send document approval notification: ${(error as Error).message}`,
       );
+      this.logger.error(`Stack trace: ${(error as Error).stack}`);
       return false;
     }
   }

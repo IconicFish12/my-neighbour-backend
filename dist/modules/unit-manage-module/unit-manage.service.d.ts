@@ -66,11 +66,6 @@ export declare class UnitManageService {
                 primaryEmail: string;
                 gender: import("src/common/database/generated/prisma").$Enums.Gender | null;
             };
-            movedInDate: Date;
-            residentStatus: import("src/common/database/generated/prisma").$Enums.ResidentStatus | null;
-            kprPaymentAmount: number | null;
-            kprDueDate: Date | null;
-            isKprPaid: boolean | null;
         } & {
             id: string;
             createdAt: Date;

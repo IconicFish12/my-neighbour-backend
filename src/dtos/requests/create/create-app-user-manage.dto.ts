@@ -107,7 +107,8 @@ export class CreateAppUserManageDto {
 
   @IsNotEmpty({ message: 'Jenis kelamin tidak boleh kosong' })
   @IsEnum(Gender, {
-    message: 'Jenis kelamin tidak valid: ' + Object.values(Gender).join(', '),
+    message:
+      'Jenis kelamin tidak valid, Pilihan: ' + Object.values(Gender).join(', '),
   })
   readonly gender: Gender;
 }

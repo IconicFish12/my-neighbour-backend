@@ -23,7 +23,7 @@ let ExportsManageService = ExportsManageService_1 = class ExportsManageService {
     paymentsReportService;
     logger = new common_1.Logger(ExportsManageService_1.name);
     browser = null;
-    templatesPath = path.join(process.cwd(), 'src', 'templates');
+    templatesPath = path.join(process.cwd(), '.', 'templates');
     constructor(operationalReportService, paymentsReportService) {
         this.operationalReportService = operationalReportService;
         this.paymentsReportService = paymentsReportService;
@@ -102,9 +102,7 @@ let ExportsManageService = ExportsManageService_1 = class ExportsManageService {
         catch (error) {
             console.error(error.message);
             this.logger.warn(`Failed to load template ${templateName}, using default template`);
-            return templateName === 'operational-report'
-                ? this.getDefaultOperationalTemplate()
-                : this.getDefaultPaymentTemplate();
+            return this.templatesPath;
         }
     }
     async exportOperationalReportToPdf(filter, template) {
@@ -328,116 +326,6 @@ let ExportsManageService = ExportsManageService_1 = class ExportsManageService {
             total: this.formatCurrency(data.total),
             percentage: totalAmount > 0 ? Math.round((data.total / totalAmount) * 100) : 0,
         }));
-    }
-    getDefaultOperationalTemplate() {
-        return `
-      <!DOCTYPE html>
-      <html lang="id">
-      <head>
-        <meta charset="utf-8">
-        <title>{{title}}</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-          .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-          .section { margin: 20px 0; }
-          .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0; }
-          .stat-card { background: #f8f9fa; padding: 15px; border-radius: 5px; text-align: center; }
-          .stat-number { font-size: 24px; font-weight: bold; color: #2563eb; }
-          .stat-label { font-size: 14px; color: #6b7280; margin-top: 5px; }
-          table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-          th { background-color: #f2f2f2; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>{{title}}</h1>
-          <p>Periode: {{period}}</p>
-          <p>Dibuat pada: {{generatedDate}}</p>
-        </div>
-        <div class="section">
-          <h2>Ringkasan Utama</h2>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-number">{{totalComplaints}}</div>
-              <div class="stat-label">Total Keluhan</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">{{totalSecurityReports}}</div>
-              <div class="stat-label">Laporan Keamanan</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">{{totalResidents}}</div>
-              <div class="stat-label">Total Penghuni</div>
-            </div>
-          </div>
-        </div>
-        <div class="section">
-          <h3>Keluhan per Kategori</h3>
-          <table>
-            <thead><tr><th>Kategori</th><th>Jumlah</th></tr></thead>
-            <tbody>
-              {{#each complaintsByCategory}}
-              <tr><td>{{this.category}}</td><td>{{this.count}}</td></tr>
-              {{/each}}
-            </tbody>
-          </table>
-        </div>
-      </body>
-      </html>
-    `;
-    }
-    getDefaultPaymentTemplate() {
-        return `
-      <!DOCTYPE html>
-      <html lang="id">
-      <head>
-        <meta charset="utf-8">
-        <title>{{title}}</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-          .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-          .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
-          .summary-card { background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; }
-          .amount { font-size: 24px; font-weight: bold; }
-          .paid { color: #10b981; }
-          .overdue { color: #ef4444; }
-          table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-          th { background-color: #f2f2f2; }
-          .text-right { text-align: right; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>{{title}}</h1>
-          <p>Periode: {{period}}</p>
-          <p>Dibuat pada: {{generatedDate}}</p>
-        </div>
-        <div class="summary">
-          <div class="summary-card">
-            <div class="amount paid">{{totalPaid}}</div>
-            <div>Total Terbayar</div>
-          </div>
-          <div class="summary-card">
-            <div class="amount overdue">{{totalOverdue}}</div>
-            <div>Total Tertunggak</div>
-          </div>
-        </div>
-        <div class="section">
-          <h3>Riwayat Pembayaran</h3>
-          <table>
-            <thead><tr><th>Tanggal</th><th>Penghuni</th><th>Tipe</th><th class="text-right">Jumlah</th></tr></thead>
-            <tbody>
-              {{#each paymentHistory}}
-              <tr><td>{{this.date}}</td><td>{{this.residentName}}</td><td>{{this.billType}}</td><td class="text-right">{{this.amount}}</td></tr>
-              {{/each}}
-            </tbody>
-          </table>
-        </div>
-      </body>
-      </html>
-    `;
     }
 };
 exports.ExportsManageService = ExportsManageService;

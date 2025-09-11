@@ -145,7 +145,8 @@ export type PostedBy = (typeof PostedBy)[keyof typeof PostedBy]
 export const UnitStatus: {
   OCCUPIED: 'OCCUPIED',
   VACANT: 'VACANT',
-  MAINTENANCE: 'MAINTENANCE'
+  MAINTENANCE: 'MAINTENANCE',
+  AVAILABLE: 'AVAILABLE'
 };
 
 export type UnitStatus = (typeof UnitStatus)[keyof typeof UnitStatus]
@@ -25041,7 +25042,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsCreateNestedManyWithoutUnitInput
@@ -25061,7 +25062,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsUncheckedCreateNestedManyWithoutUnitInput
@@ -25121,7 +25122,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -29380,7 +29381,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Payments?: PaymentsCreateNestedManyWithoutUnitInput
@@ -29399,7 +29400,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Payments?: PaymentsUncheckedCreateNestedManyWithoutUnitInput
@@ -29982,7 +29983,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsCreateNestedManyWithoutUnitInput
@@ -30001,7 +30002,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsUncheckedCreateNestedManyWithoutUnitInput
@@ -31053,7 +31054,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsCreateNestedManyWithoutUnitInput
@@ -31072,7 +31073,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsUncheckedCreateNestedManyWithoutUnitInput
@@ -32078,7 +32079,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsCreateNestedManyWithoutUnitInput
@@ -32097,7 +32098,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsUncheckedCreateNestedManyWithoutUnitInput
@@ -32369,7 +32370,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsCreateNestedManyWithoutUnitInput
@@ -32388,7 +32389,7 @@ export namespace Prisma {
     priceSale: number
     squareFootage?: number | null
     location: string
-    status: $Enums.UnitStatus
+    status?: $Enums.UnitStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     Residents?: ResidentsUncheckedCreateNestedManyWithoutUnitInput

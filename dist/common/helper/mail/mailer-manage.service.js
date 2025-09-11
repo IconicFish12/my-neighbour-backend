@@ -19,9 +19,25 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
     constructor(mailService) {
         this.mailService = mailService;
     }
+    async sendMailWithRetry(mailOptions, maxRetries = 3, delay = 1000) {
+        let lastError;
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                await this.mailService.sendMail(mailOptions);
+                return;
+            }
+            catch (error) {
+                lastError = error;
+                this.logger.warn(`Email send attempt ${attempt}/${maxRetries} failed: ${lastError.message}`);
+                if (attempt < maxRetries) {
+                    await new Promise((resolve) => setTimeout(resolve, delay * attempt));
+                }
+            }
+        }
+    }
     async sendHeadOfHouseholdVerificationEmail(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.email,
                 subject: 'Verifikasi Registrasi Kepala Keluarga - ' +
                     (data.propertyName || 'Property Management'),
@@ -39,12 +55,13 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
         }
         catch (error) {
             this.logger.error(`Gagal mengirim email verifikasi kepala rumah tangga: ${error.message}`);
+            this.logger.error(`Stack trace: ${error.stack}`);
             return false;
         }
     }
     async sendDocumentVerificationRequestToAdmin(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.adminEmail,
                 subject: `Review Dokumen - ${data.applicantName}`,
                 template: 'reviewDocument',
@@ -57,7 +74,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
                     year: new Date().getFullYear(),
                 },
             });
-            this.logger.log(`Permintaan verifikasi dokumen dikirim ke admin${data.adminEmail}`);
+            this.logger.log(`Permintaan verifikasi dokumen dikirim ke admin ${data.adminEmail}`);
             return true;
         }
         catch (error) {
@@ -67,7 +84,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
     }
     async sendHeadOfHouseholdWelcomeEmail(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.email,
                 subject: 'Selamat Datang! Registrasi Berhasil',
                 template: 'emailWelcome',
@@ -90,7 +107,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
     }
     async sendFamilyMemberVerificationEmail(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.email,
                 subject: 'Verifikasi Registrasi Anggota Keluarga',
                 template: 'emailVerification',
@@ -112,7 +129,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
     }
     async sendFamilyMemberApprovalNotification(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.headOfHouseholdEmail,
                 subject: 'Persetujuan Diperlukan - Anggota Keluarga Baru',
                 template: 'family-member-approval-notification',
@@ -130,12 +147,13 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
         }
         catch (error) {
             this.logger.error(`Failed to send family member approval notification: ${error.message}`);
+            this.logger.error(`Stack trace: ${error.stack}`);
             return false;
         }
     }
     async sendFamilyMemberWelcomeEmail(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.email,
                 subject: 'Selamat Datang! Registrasi Anggota Keluarga Berhasil',
                 template: 'emailWelcome',
@@ -153,12 +171,13 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
         }
         catch (error) {
             this.logger.error(`Failed to send family member welcome email: ${error.message}`);
+            this.logger.error(`Stack trace: ${error.stack}`);
             return false;
         }
     }
     async sendAdminDrivenHeadOfHouseholdEmail(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.email,
                 subject: 'Akun Anda Telah Dibuat - ' +
                     (data.propertyName || 'Property Management'),
@@ -176,12 +195,13 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
         }
         catch (error) {
             this.logger.error(`Failed to send admin-driven head of household email: ${error.message}`);
+            this.logger.error(`Stack trace: ${error.stack}`);
             return false;
         }
     }
     async sendAdminDrivenFamilyMemberEmail(data) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: data.email,
                 subject: 'Akun Anggota Keluarga Telah Dibuat',
                 template: 'admin-driven-family-member',
@@ -197,12 +217,13 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
         }
         catch (error) {
             this.logger.error(`Failed to send admin-driven family member email: ${error.message}`);
+            this.logger.error(`Stack trace: ${error.stack}`);
             return false;
         }
     }
     async sendFamilyMemberRejectionNotification(familyMemberEmail, familyMemberName, headOfHouseholdName, reason) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: familyMemberEmail,
                 subject: 'Registrasi Ditolak',
                 template: 'rejectApproval',
@@ -218,12 +239,13 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
         }
         catch (error) {
             this.logger.error(`Failed to send family member rejection notification: ${error.message}`);
+            this.logger.error(`Stack trace: ${error.stack}`);
             return false;
         }
     }
     async sendDocumentApprovalNotification(applicantEmail, applicantName, documentType) {
         try {
-            await this.mailService.sendMail({
+            await this.sendMailWithRetry({
                 to: applicantEmail,
                 subject: `Dokumen ${documentType} Telah Diverifikasi`,
                 template: 'document-approval',
@@ -238,6 +260,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
         }
         catch (error) {
             this.logger.error(`Failed to send document approval notification: ${error.message}`);
+            this.logger.error(`Stack trace: ${error.stack}`);
             return false;
         }
     }

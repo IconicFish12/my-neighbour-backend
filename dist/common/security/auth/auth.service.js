@@ -32,118 +32,145 @@ let AuthService = class AuthService extends uploads_service_1.UploadsService {
         this.config = config;
     }
     async registration(registRequest, files) {
-        const existingUser = await this.prisma.users.findFirst({
-            where: {
-                OR: [
-                    { username: registRequest.username },
-                    { primaryEmail: registRequest.primaryEmail },
-                ],
-            },
-        });
-        if (existingUser) {
-            throw new common_1.ConflictException('Username or email sudah tersedia');
-        }
-        if (registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS) {
-            await this.validateFamilyCode(registRequest.familyCode);
-        }
-        if (registRequest.residentType === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
-            await this.validateUnitOwnership(registRequest.unitId);
-        }
-        const hashedPassword = await bcrypt.hash(registRequest.password, 12);
-        const verificationToken = crypto.randomBytes(32).toString('hex');
-        const verificationCode = this.mailerService.generateVerificationCode();
-        const result = await this.prisma.$transaction(async (prisma) => {
-            const user = await prisma.users.create({
-                data: {
-                    fullName: registRequest.fullName,
-                    firstName: registRequest.firstName,
-                    lastName: registRequest.lastName,
-                    username: registRequest.username,
-                    primaryEmail: registRequest.primaryEmail,
-                    contactNumber: registRequest.contactNumber,
-                    dateOfBirth: registRequest.dateOfBirth,
-                    password: hashedPassword,
-                    role: registRequest.role,
-                    gender: registRequest.gender,
+        try {
+            const existingUser = await this.prisma.users.findFirst({
+                where: {
+                    OR: [
+                        { username: registRequest.username },
+                        { primaryEmail: registRequest.primaryEmail },
+                    ],
                 },
             });
-            const residentData = {
-                userId: user.id,
-                emergencyContactName: registRequest.emergencyContactName,
-                emergencyContactNumber: registRequest.emergencyContactNumber,
-                movedInDate: registRequest.movedInDate ?? new Date(),
-                residentStatus: registRequest.residentType,
-                registrationStatus: 'PENDING',
-                registrationMethod: 'USER_DRIVEN',
-                pendingApproval: registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS,
-            };
-            if (registRequest.residentType === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
-                residentData.unitId = registRequest.unitId;
-            }
-            else if (registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS) {
-                residentData.familyCode = registRequest.familyCode;
-            }
-            const resident = await prisma.residents.create({
-                data: residentData,
-                include: {
-                    unit: true,
-                    user: true,
-                },
-            });
-            if (files && files.length > 0) {
-                await this.handleDocumentUploads(resident.id, files, registRequest.documentTypes);
+            if (existingUser) {
+                throw new common_1.ConflictException('Username or email sudah tersedia');
             }
             if (registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS) {
-                await this.createFamilyApprovalRequest(resident.id, registRequest.familyCode);
-                const familyCodeRecord = await prisma.familyCodes.findUnique({
-                    where: { code: registRequest.familyCode },
-                    include: {
-                        headResident: {
-                            include: { user: true },
-                        },
+                await this.validateFamilyCode(registRequest.familyCode);
+            }
+            if (registRequest.residentType === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+                await this.validateUnitOwnership(registRequest.unitId);
+            }
+            const hashedPassword = await bcrypt.hash(registRequest.password, 12);
+            const verificationToken = crypto.randomBytes(32).toString('hex');
+            const verificationCode = this.mailerService.generateVerificationCode();
+            const result = await this.prisma.$transaction(async (prisma) => {
+                const user = await prisma.users.create({
+                    data: {
+                        fullName: registRequest.fullName,
+                        firstName: registRequest.firstName,
+                        lastName: registRequest.lastName,
+                        username: registRequest.username,
+                        primaryEmail: registRequest.primaryEmail,
+                        contactNumber: registRequest.contactNumber,
+                        dateOfBirth: registRequest.dateOfBirth,
+                        emailVerificationToken: verificationToken,
+                        password: hashedPassword,
+                        role: prisma_1.UserRole.RESIDENT,
+                        gender: registRequest.gender,
                     },
                 });
-                if (familyCodeRecord) {
-                    await this.mailerService.sendFamilyMemberApprovalNotification({
-                        headOfHouseholdName: familyCodeRecord.headResident.user.fullName,
-                        headOfHouseholdEmail: familyCodeRecord.headResident.user.primaryEmail,
-                        familyMemberName: resident.user.fullName,
-                        familyMemberEmail: user.primaryEmail,
-                        uniqueCode: familyCodeRecord.code,
-                        actionUrl: `${this.config.get('APP_URL')}/auth/family-approval`,
+                const residentData = {
+                    userId: user.id,
+                    emergencyContactName: registRequest.emergencyContactName,
+                    emergencyContactNumber: registRequest.emergencyContactNumber,
+                    movedInDate: registRequest.movedInDate ?? new Date(),
+                    residentStatus: registRequest.residentType,
+                    registrationStatus: 'PENDING',
+                    registrationMethod: 'USER_DRIVEN',
+                    pendingApproval: registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS,
+                };
+                if (registRequest.residentType === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+                    residentData.unitId = registRequest.unitId;
+                    await prisma.units.update({
+                        where: { id: registRequest.unitId },
+                        data: {
+                            status: prisma_1.UnitStatus.OCCUPIED,
+                        },
+                    });
+                }
+                else if (registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS) {
+                    residentData.familyCode = registRequest.familyCode;
+                }
+                const resident = await prisma.residents.create({
+                    data: residentData,
+                    include: {
+                        unit: true,
+                        user: true,
+                    },
+                });
+                if (files && files.length > 0) {
+                    await this.handleDocumentUploads(resident.id, files, registRequest.documentTypes);
+                }
+                if (registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS) {
+                    await this.createFamilyApprovalRequest(resident.id, registRequest.familyCode);
+                }
+                return {
+                    user,
+                    resident,
+                    verificationCode,
+                };
+            }, {
+                timeout: 10000,
+            });
+            try {
+                if (registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS) {
+                    const familyCodeRecord = await this.prisma.familyCodes.findUnique({
+                        where: { code: registRequest.familyCode },
+                        include: {
+                            headResident: {
+                                include: { user: true },
+                            },
+                        },
+                    });
+                    if (familyCodeRecord) {
+                        await this.mailerService.sendFamilyMemberApprovalNotification({
+                            headOfHouseholdName: familyCodeRecord.headResident.user.fullName,
+                            headOfHouseholdEmail: familyCodeRecord.headResident.user.primaryEmail,
+                            familyMemberName: result.resident.user.fullName,
+                            familyMemberEmail: result.user.primaryEmail,
+                            uniqueCode: familyCodeRecord.code,
+                            actionUrl: `${this.config.get('APP_URL')}/auth/family-approval`,
+                        });
+                    }
+                    await this.mailerService.sendFamilyMemberVerificationEmail({
+                        fullName: result.resident.user.fullName,
+                        registrationType: registRequest.registrationMethod,
+                        isAdminDriven: false,
+                        email: result.user.primaryEmail,
+                        verificationCode: result.verificationCode,
+                        propertyName: this.config.get('APPLICATION_NAME', 'Property Management'),
+                    });
+                }
+                if (registRequest.residentType === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+                    await this.mailerService.sendHeadOfHouseholdVerificationEmail({
+                        fullName: result.resident.user.fullName,
+                        email: result.user.primaryEmail,
+                        verificationCode: result.verificationCode,
+                        registrationType: registRequest.registrationMethod,
+                        isAdminDriven: false,
+                        unitNumber: result.resident.unit?.unitNumber,
+                        propertyName: this.config.get('APPLICATION_NAME', 'Property Management'),
                     });
                 }
             }
-            if (registRequest.residentType === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
-                await this.mailerService.sendHeadOfHouseholdVerificationEmail({
-                    fullName: resident.user.fullName,
-                    email: user.primaryEmail,
-                    verificationCode,
-                    registrationType: registRequest.registrationMethod,
-                    isAdminDriven: false,
-                    unitNumber: resident.unit?.unitNumber,
-                    propertyName: this.config.get('PROPERTY_NAME', 'Property Management'),
-                });
-            }
-            else {
-                await this.mailerService.sendFamilyMemberVerificationEmail({
-                    fullName: resident.user.fullName,
-                    registrationType: registRequest.registrationMethod,
-                    isAdminDriven: false,
-                    email: user.primaryEmail,
-                    verificationCode,
-                    propertyName: this.config.get('PROPERTY_NAME', 'Property Management'),
-                });
+            catch (emailError) {
+                console.error('Email sending failed, but registration successful:', emailError);
             }
             return {
                 message: 'Registration successful. Please check your email for verification.',
-                userId: user.id,
-                residentId: resident.id,
+                residentFullname: result.user.fullName,
+                residentType: result.resident.residentStatus,
                 requiresApproval: registRequest.residentType === prisma_1.ResidentStatus.FAMILY_MEMBERS,
-                verificationCode,
             };
-        });
-        return result;
+        }
+        catch (error) {
+            if (error instanceof common_1.ConflictException ||
+                error instanceof common_1.BadRequestException) {
+                throw error;
+            }
+            console.error('Registration error:', error);
+            throw new common_1.InternalServerErrorException('Terjadi Kesalahan pada proses registrasi');
+        }
     }
     async verifyEmail(token) {
         const user = await this.prisma.users.findFirst({
@@ -179,18 +206,23 @@ let AuthService = class AuthService extends uploads_service_1.UploadsService {
                 }
             }
         });
-        if (user.Resident) {
-            const uniqueCode = this.mailerService.generateUniqueCode();
-            if (user.Resident.residentStatus === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
-                await this.mailerService.sendHeadOfHouseholdWelcomeEmail({
-                    fullName: user.fullName,
-                    email: user.primaryEmail,
-                    uniqueCode,
-                    loginUrl: `${this.config.get('APP_URL')}/auth/sign-in`,
-                    propertyName: this.config.get('PROPERTY_NAME', 'Property Management'),
-                    unitNumber: user.Resident?.unit?.unitNumber ?? 'Unit tidak ditemukan',
-                });
+        try {
+            if (user.Resident) {
+                const uniqueCode = this.mailerService.generateUniqueCode();
+                if (user.Resident.residentStatus === prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+                    await this.mailerService.sendHeadOfHouseholdWelcomeEmail({
+                        fullName: user.fullName,
+                        email: user.primaryEmail,
+                        uniqueCode,
+                        loginUrl: `${this.config.get('APP_URL')}/auth/sign-in`,
+                        propertyName: this.config.get('PROPERTY_NAME', 'Property Management'),
+                        unitNumber: user.Resident?.unit?.unitNumber ?? 'Unit tidak ditemukan',
+                    });
+                }
             }
+        }
+        catch (emailError) {
+            console.error('Welcome email sending failed:', emailError);
         }
         return {
             message: 'Email verified successfully. You can now sign in.',
@@ -238,6 +270,21 @@ let AuthService = class AuthService extends uploads_service_1.UploadsService {
                     where: { id: approval.familyMemberId },
                     data: { familyCode },
                 });
+            }
+            else {
+                await prisma.residents.update({
+                    where: { id: approval.familyMemberId },
+                    data: {
+                        registrationStatus: 'REJECTED',
+                        pendingApproval: false,
+                        rejectionReason: approvalRequest.notes,
+                    },
+                });
+            }
+            return updatedApproval;
+        });
+        try {
+            if (approvalRequest.action === 'APPROVE') {
                 const uniqueCode = this.mailerService.generateUniqueCode();
                 await this.mailerService.sendFamilyMemberWelcomeEmail({
                     fullName: approval.familyMember.user.fullName,
@@ -249,18 +296,12 @@ let AuthService = class AuthService extends uploads_service_1.UploadsService {
                 });
             }
             else {
-                await prisma.residents.update({
-                    where: { id: approval.familyMemberId },
-                    data: {
-                        registrationStatus: 'REJECTED',
-                        pendingApproval: false,
-                        rejectionReason: approvalRequest.notes,
-                    },
-                });
                 await this.mailerService.sendFamilyMemberRejectionNotification(approval.familyMember.user.primaryEmail, approval.familyMember.user.fullName, approval.headOfHousehold.user.fullName, approvalRequest.notes);
             }
-            return updatedApproval;
-        });
+        }
+        catch (emailError) {
+            console.error('Approval email sending failed:', emailError);
+        }
         return {
             message: `Family member ${approvalRequest.action === 'APPROVE' ? 'approved' : 'rejected'} successfully`,
             approval: result,
@@ -387,8 +428,17 @@ let AuthService = class AuthService extends uploads_service_1.UploadsService {
         if (!unit) {
             throw new common_1.BadRequestException('Unit not found');
         }
-        if (unit.status !== 'OCCUPIED') {
+        if (unit?.status !== prisma_1.UnitStatus.AVAILABLE) {
             throw new common_1.BadRequestException('Unit is not available');
+        }
+        const existingHeadResident = await this.prisma.residents.findFirst({
+            where: {
+                unitId: unitId,
+                residentStatus: prisma_1.ResidentStatus.HEAD_HOUSE_HOLD,
+            },
+        });
+        if (existingHeadResident) {
+            throw new common_1.BadRequestException('Unit sudah memiliki kepala keluarga');
         }
     }
     async handleDocumentUploads(residentId, files, documentTypes) {

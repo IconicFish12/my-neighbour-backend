@@ -49,7 +49,8 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Posisi Pegawai tidak boleh kosong.' }),
     (0, class_validator_1.IsEnum)(prisma_1.EmployeeRole, {
-        message: 'Posisi Pegawai tidak valid.' + Object.values(prisma_1.EmployeeRole).join(', '),
+        message: 'Posisi Pegawai tidak valid. Pilihan' +
+            Object.values(prisma_1.EmployeeRole).join(', '),
     }),
     __metadata("design:type", String)
 ], CreateEmployeeManageDto.prototype, "employeePosition", void 0);

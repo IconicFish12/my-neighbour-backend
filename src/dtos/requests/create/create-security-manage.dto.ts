@@ -30,7 +30,11 @@ export class CreateSecurityManageDto {
   @Type(() => Date)
   readonly incidentDate: Date;
 
-  @IsEnum(MaintenanceStatus, { message: 'Status laporan tidak valid.' })
+  @IsEnum(MaintenanceStatus, {
+    message:
+      'Status laporan tidak valid. Pilihan: ' +
+      Object.values(MaintenanceStatus).join(', '),
+  })
   @IsNotEmpty({ message: 'Status laporan tidak boleh kosong.' })
   readonly status: MaintenanceStatus;
 

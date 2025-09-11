@@ -45,7 +45,9 @@ export class CreateForumPostManageDto {
   readonly attachments?: string[];
 
   @IsEnum(UserRole, {
-    message: 'Peran Penulis tidak valid : ' + Object.values(UserRole).join(','),
+    message:
+      'Peran Penulis tidak valid. Pilihan: ' +
+      Object.values(UserRole).join(','),
   })
   @IsOptional({ message: 'Peran Penulis bersifat Optional' })
   readonly authorRole: UserRole;

@@ -19,7 +19,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { SignInRequest } from '../../../dtos/requests/sign-in-request';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Request as expressRequest } from 'express';
-import { DatabaseService } from 'src/common/database/database.service';
+import { DatabaseService } from '../../../common/database/database.service';
 
 @Controller()
 export class AuthController {

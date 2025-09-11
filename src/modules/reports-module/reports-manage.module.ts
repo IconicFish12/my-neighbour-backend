@@ -21,6 +21,7 @@ import { FinancialModule } from '../financial-module/financial.module';
     ContactManageModule,
     CommunicationModule,
     FinancialModule,
+    PaymentsReportModule,
   ],
   exports: [OperationalReportModule, PaymentsReportModule],
 })

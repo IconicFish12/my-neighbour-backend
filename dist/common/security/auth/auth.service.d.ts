@@ -13,10 +13,9 @@ export declare class AuthService extends UploadsService {
     constructor(prisma: DatabaseService, jwt: JwtService, mailerService: MailerManageService, config: ConfigService);
     registration(registRequest: RegistRequest, files?: Express.Multer.File[]): Promise<{
         message: string;
-        userId: string;
-        residentId: string;
+        residentFullname: string;
+        residentType: import("../../../common/database/generated/prisma").$Enums.ResidentStatus | null;
         requiresApproval: boolean;
-        verificationCode: string;
     }>;
     verifyEmail(token: string): Promise<{
         message: string;
@@ -32,9 +31,9 @@ export declare class AuthService extends UploadsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import("../../../common/database/generated/prisma").$Enums.ApprovalStatus;
             familyMemberId: string;
             headOfHouseholdId: string;
+            status: import("../../../common/database/generated/prisma").$Enums.ApprovalStatus;
             requestedAt: Date;
             respondedAt: Date | null;
             notes: string | null;
@@ -70,14 +69,12 @@ export declare class AuthService extends UploadsService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                userId: string;
                 emergencyContactName: string | null;
                 emergencyContactNumber: string | null;
                 movedInDate: Date;
                 movedOutDate: Date | null;
                 familyCode: string | null;
                 residentStatus: import("../../../common/database/generated/prisma").$Enums.ResidentStatus | null;
-                unitId: string | null;
                 kprPaymentAmount: number | null;
                 kprDueDate: Date | null;
                 isKprPaid: boolean | null;
@@ -88,6 +85,8 @@ export declare class AuthService extends UploadsService {
                 rejectionReason: string | null;
                 pendingApproval: boolean;
                 approvedByHeadOfHousehold: string | null;
+                userId: string;
+                unitId: string | null;
             }) | null;
         };
     }>;

@@ -35,7 +35,6 @@ const operational_report_module_1 = require("./modules/reports-module/operationa
 const payments_report_module_1 = require("./modules/reports-module/payments-report-module/payments-report.module");
 const request_manage_module_1 = require("./modules/request-module/request-manage.module");
 const complaint_manage_module_1 = require("./modules/request-module/compliant-module/complaint-manage.module");
-const uploads_module_1 = require("./common/helper/uploads/uploads.module");
 const helper_module_1 = require("./common/helper/helper.module");
 let AppModule = class AppModule {
 };
@@ -43,12 +42,10 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            uploads_module_1.UploadFilesModule,
             helper_module_1.HelperModule,
             database_module_1.DatabaseModule,
             backend_api_module_1.BackendApiModule,
             auth_module_1.AuthModule,
-            mailer_manage_module_1.MailerManageModule,
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
                 envFilePath: '.env',

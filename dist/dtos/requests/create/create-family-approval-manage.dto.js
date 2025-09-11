@@ -41,7 +41,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Peran tidak boleh kosong' }),
     (0, class_validator_1.IsEnum)(prisma_1.ApprovalStatus, {
-        message: 'Peran tidak valid: ' + Object.values(prisma_1.ApprovalStatus).join(', '),
+        message: 'Peran tidak valid. Pilihan: ' + Object.values(prisma_1.ApprovalStatus).join(', '),
     }),
     __metadata("design:type", String)
 ], CreateFamilyApprovalManageDto.prototype, "status", void 0);
