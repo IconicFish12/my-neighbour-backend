@@ -95,6 +95,9 @@ export declare class AuthService extends UploadsService {
         refreshToken: string;
     }>;
     jwtCompare(token: string, userId: string): Promise<boolean>;
+    resendVerificationEmail(email: string): Promise<{
+        message: string;
+    }>;
     private validateFamilyCode;
     private validateUnitOwnership;
     private handleDocumentUploads;

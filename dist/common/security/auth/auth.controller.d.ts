@@ -65,6 +65,9 @@ export declare class AuthController {
     verifyEmail(token: string): Promise<{
         message: string;
     }>;
+    resendVerificationEmail(email: string): Promise<{
+        message: string;
+    }>;
     refreshToken(req: expressRequest & {
         user: any;
     }): Promise<{
@@ -75,7 +78,7 @@ export declare class AuthController {
         user: any;
     }): Promise<{
         message: string;
-        userId: ({
+        user: {
             Resident: ({
                 unit: {
                     id: string;
@@ -132,7 +135,7 @@ export declare class AuthController {
             gender: import("src/common/database/generated/prisma").$Enums.Gender | null;
             createdAt: Date;
             updatedAt: Date;
-        }) | null;
+        };
     }>;
     getFamilyApprovals(req: expressRequest & {
         user: any;
@@ -180,6 +183,7 @@ export declare class AuthController {
             respondedAt: Date | null;
             notes: string | null;
         })[];
+        totalPending: number;
     }>;
     approveFamily(approvalId: string, req: expressRequest & {
         user: any;
@@ -200,9 +204,119 @@ export declare class AuthController {
             notes: string | null;
         };
     }>;
+    getFamilyApprovalHistory(req: expressRequest & {
+        user: any;
+    }): Promise<{
+        message: string;
+        history: ({
+            familyMember: {
+                user: {
+                    id: string;
+                    fullName: string;
+                    contactNumber: string | null;
+                    primaryEmail: string;
+                };
+            } & {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                emergencyContactName: string | null;
+                emergencyContactNumber: string | null;
+                movedInDate: Date;
+                movedOutDate: Date | null;
+                familyCode: string | null;
+                residentStatus: import("src/common/database/generated/prisma").$Enums.ResidentStatus | null;
+                kprPaymentAmount: number | null;
+                kprDueDate: Date | null;
+                isKprPaid: boolean | null;
+                registrationStatus: import("src/common/database/generated/prisma").$Enums.RegistrationStatus;
+                registrationMethod: import("src/common/database/generated/prisma").$Enums.RegistrationMethod;
+                approvedBy: string | null;
+                approvalDate: Date | null;
+                rejectionReason: string | null;
+                pendingApproval: boolean;
+                approvedByHeadOfHousehold: string | null;
+                userId: string;
+                unitId: string | null;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            familyMemberId: string;
+            headOfHouseholdId: string;
+            status: import("src/common/database/generated/prisma").$Enums.ApprovalStatus;
+            requestedAt: Date;
+            respondedAt: Date | null;
+            notes: string | null;
+        })[];
+        totalProcessed: number;
+    }>;
+    checkRegistrationStatus(email: string): Promise<{
+        message: string;
+        status: {
+            emailVerified: boolean;
+            registrationStatus: import("src/common/database/generated/prisma").$Enums.RegistrationStatus | undefined;
+            residentStatus: import("src/common/database/generated/prisma").$Enums.ResidentStatus | null | undefined;
+            pendingApproval: boolean;
+        };
+    }>;
     logout(req: expressRequest & {
         user: any;
     }): Promise<{
         message: string;
+    }>;
+    validateSession(req: expressRequest & {
+        user: any;
+    }): Promise<{
+        message: string;
+        user: {
+            id: string;
+            username: string;
+            fullName: string;
+            email: string;
+        };
+    }>;
+    getFamilyMembers(req: expressRequest & {
+        user: any;
+    }): Promise<{
+        message: string;
+        familyMembers: never[];
+        familyCode: null;
+        totalMembers?: undefined;
+    } | {
+        message: string;
+        familyMembers: ({
+            user: {
+                id: string;
+                fullName: string;
+                contactNumber: string | null;
+                primaryEmail: string;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            emergencyContactName: string | null;
+            emergencyContactNumber: string | null;
+            movedInDate: Date;
+            movedOutDate: Date | null;
+            familyCode: string | null;
+            residentStatus: import("src/common/database/generated/prisma").$Enums.ResidentStatus | null;
+            kprPaymentAmount: number | null;
+            kprDueDate: Date | null;
+            isKprPaid: boolean | null;
+            registrationStatus: import("src/common/database/generated/prisma").$Enums.RegistrationStatus;
+            registrationMethod: import("src/common/database/generated/prisma").$Enums.RegistrationMethod;
+            approvedBy: string | null;
+            approvalDate: Date | null;
+            rejectionReason: string | null;
+            pendingApproval: boolean;
+            approvedByHeadOfHousehold: string | null;
+            userId: string;
+            unitId: string | null;
+        })[];
+        familyCode: string;
+        totalMembers: number;
     }>;
 }

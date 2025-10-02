@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MailerManageService = void 0;
 const mailer_1 = require("@nestjs-modules/mailer");
 const common_1 = require("@nestjs/common");
+const prisma_1 = require("../../database/generated/prisma/index.js");
 let MailerManageService = MailerManageService_1 = class MailerManageService {
     mailService;
     logger = new common_1.Logger(MailerManageService_1.name);
@@ -94,6 +95,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
                     loginUrl: data.loginUrl,
                     propertyName: data.propertyName,
                     unitNumber: data.unitNumber,
+                    residentStatus: prisma_1.ResidentStatus.HEAD_HOUSE_HOLD,
                     year: new Date().getFullYear(),
                 },
             });
@@ -132,7 +134,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
             await this.sendMailWithRetry({
                 to: data.headOfHouseholdEmail,
                 subject: 'Persetujuan Diperlukan - Anggota Keluarga Baru',
-                template: 'family-member-approval-notification',
+                template: 'familyApproval',
                 context: {
                     headOfHouseholdName: data.headOfHouseholdName,
                     familyMemberName: data.familyMemberName,
@@ -163,6 +165,7 @@ let MailerManageService = MailerManageService_1 = class MailerManageService {
                     loginUrl: data.loginUrl,
                     propertyName: data.propertyName,
                     unitNumber: data.unitNumber,
+                    residentStatus: prisma_1.ResidentStatus.FAMILY_MEMBERS,
                     year: new Date().getFullYear(),
                 },
             });

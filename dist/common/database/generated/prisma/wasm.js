@@ -303,8 +303,6 @@ exports.Prisma.PaymentsScalarFieldEnum = {
   id: 'id',
   amount: 'amount',
   paymentDate: 'paymentDate',
-  paymentMethod: 'paymentMethod',
-  status: 'status',
   residentId: 'residentId',
   unitId: 'unitId',
   processedByEmployeeId: 'processedByEmployeeId',
@@ -425,20 +423,6 @@ exports.UnitStatus = exports.$Enums.UnitStatus = {
 exports.PaymentType = exports.$Enums.PaymentType = {
   CICILAN_KPR: 'CICILAN_KPR',
   IURAN_BULANAN: 'IURAN_BULANAN'
-};
-
-exports.PaymentMethod = exports.$Enums.PaymentMethod = {
-  BANK_TRANSFER: 'BANK_TRANSFER',
-  E_WALLET: 'E_WALLET',
-  CREDIT_CARD: 'CREDIT_CARD',
-  CASH: 'CASH'
-};
-
-exports.PaymentStatus = exports.$Enums.PaymentStatus = {
-  PAID: 'PAID',
-  PENDING: 'PENDING',
-  OVERDUE: 'OVERDUE',
-  CANCELLED: 'CANCELLED'
 };
 
 exports.ContactRole = exports.$Enums.ContactRole = {

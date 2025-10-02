@@ -20,6 +20,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const sign_in_request_1 = require("../../../dtos/requests/sign-in-request");
 const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
 const database_service_1 = require("../../../common/database/database.service");
+const prisma_1 = require("../../database/generated/prisma/index.js");
 let AuthController = class AuthController {
     authService;
     prisma;
@@ -34,7 +35,16 @@ let AuthController = class AuthController {
         return this.authService.signIn(signInDto);
     }
     verifyEmail(token) {
+        if (!token) {
+            throw new common_1.BadRequestException('Verification token is required');
+        }
         return this.authService.verifyEmail(token);
+    }
+    async resendVerificationEmail(email) {
+        if (!email) {
+            throw new common_1.BadRequestException('Email is required');
+        }
+        return this.authService.resendVerificationEmail(email);
     }
     refreshToken(req) {
         return this.authService.generateTokens(req.user.sub);
@@ -51,9 +61,12 @@ let AuthController = class AuthController {
                 },
             },
         });
+        if (!userProfile) {
+            throw new common_1.BadRequestException('User profile not found');
+        }
         return {
             message: 'Profile retrieved successfully',
-            userId: userProfile,
+            user: userProfile,
         };
     }
     async getFamilyApprovals(req) {
@@ -63,6 +76,9 @@ let AuthController = class AuthController {
         });
         if (!resident) {
             throw new common_1.BadRequestException('Resident profile not found');
+        }
+        if (resident.residentStatus !== prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+            throw new common_1.BadRequestException('Only head of household can view family approvals');
         }
         const pendingApprovals = await this.prisma.familyApprovals.findMany({
             where: {
@@ -90,9 +106,17 @@ let AuthController = class AuthController {
         return {
             message: 'Family approvals retrieved successfully',
             approvals: pendingApprovals,
+            totalPending: pendingApprovals.length,
         };
     }
     async approveFamily(approvalId, req, approvalData) {
+        if (!approvalId) {
+            throw new common_1.BadRequestException('Approval ID is required');
+        }
+        if (!approvalData.action ||
+            !['APPROVE', 'REJECT'].includes(approvalData.action)) {
+            throw new common_1.BadRequestException('Valid action (APPROVE or REJECT) is required');
+        }
         const userId = req.user.sub;
         const resident = await this.prisma.residents.findFirst({
             where: { userId: userId },
@@ -100,20 +124,161 @@ let AuthController = class AuthController {
         if (!resident) {
             throw new common_1.BadRequestException('Resident profile not found');
         }
+        if (resident.residentStatus !== prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+            throw new common_1.BadRequestException('Only head of household can approve family members');
+        }
         return this.authService.approvalSystem({
             familyApprovalId: approvalId,
             headOfHouseholdId: resident.id,
             ...approvalData,
         });
     }
+    async getFamilyApprovalHistory(req) {
+        const userId = req.user.sub;
+        const resident = await this.prisma.residents.findFirst({
+            where: { userId: userId },
+        });
+        if (!resident) {
+            throw new common_1.BadRequestException('Resident profile not found');
+        }
+        if (resident.residentStatus !== prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+            throw new common_1.BadRequestException('Only head of household can view approval history');
+        }
+        const approvalHistory = await this.prisma.familyApprovals.findMany({
+            where: {
+                headOfHouseholdId: resident.id,
+                status: { in: ['APPROVED', 'REJECTED'] },
+            },
+            include: {
+                familyMember: {
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                fullName: true,
+                                primaryEmail: true,
+                                contactNumber: true,
+                            },
+                        },
+                    },
+                },
+            },
+            orderBy: {
+                respondedAt: 'desc',
+            },
+        });
+        return {
+            message: 'Family approval history retrieved successfully',
+            history: approvalHistory,
+            totalProcessed: approvalHistory.length,
+        };
+    }
+    async checkRegistrationStatus(email) {
+        if (!email) {
+            throw new common_1.BadRequestException('Email is required');
+        }
+        const user = await this.prisma.users.findUnique({
+            where: { primaryEmail: email },
+            include: {
+                Resident: true,
+            },
+        });
+        if (!user) {
+            throw new common_1.BadRequestException('User not found');
+        }
+        return {
+            message: 'Registration status retrieved successfully',
+            status: {
+                emailVerified: user.emailVerificationToken === null,
+                registrationStatus: user.Resident?.registrationStatus,
+                residentStatus: user.Resident?.residentStatus,
+                pendingApproval: user.Resident?.pendingApproval || false,
+            },
+        };
+    }
     async logout(req) {
         const userId = req.user.sub;
+        const user = await this.prisma.users.findUnique({
+            where: { id: userId },
+        });
+        if (!user) {
+            throw new common_1.BadRequestException('User not found');
+        }
         await this.prisma.users.update({
             where: { id: userId },
             data: { sessionToken: null },
         });
         return {
             message: 'Logout successful',
+        };
+    }
+    async validateSession(req) {
+        const userId = req.user.sub;
+        const user = await this.prisma.users.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                username: true,
+                fullName: true,
+                primaryEmail: true,
+                sessionToken: true,
+            },
+        });
+        if (!user) {
+            throw new common_1.UnauthorizedException('Invalid session');
+        }
+        return {
+            message: 'Session is valid',
+            user: {
+                id: user.id,
+                username: user.username,
+                fullName: user.fullName,
+                email: user.primaryEmail,
+            },
+        };
+    }
+    async getFamilyMembers(req) {
+        const userId = req.user.sub;
+        const resident = await this.prisma.residents.findFirst({
+            where: { userId: userId },
+        });
+        if (!resident) {
+            throw new common_1.BadRequestException('Resident profile not found');
+        }
+        if (resident.residentStatus !== prisma_1.ResidentStatus.HEAD_HOUSE_HOLD) {
+            throw new common_1.BadRequestException('Only head of household can view family members');
+        }
+        const familyCode = await this.prisma.familyCodes.findFirst({
+            where: { headOfHousehold: resident.id },
+        });
+        if (!familyCode) {
+            return {
+                message: 'No family code found',
+                familyMembers: [],
+                familyCode: null,
+            };
+        }
+        const familyMembers = await this.prisma.residents.findMany({
+            where: {
+                familyCode: familyCode.code,
+                residentStatus: prisma_1.ResidentStatus.FAMILY_MEMBERS,
+            },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        primaryEmail: true,
+                        contactNumber: true,
+                    },
+                },
+            },
+        });
+        return {
+            message: 'Family members retrieved successfully',
+            familyMembers,
+            familyCode: familyCode.code,
+            totalMembers: familyMembers.length,
         };
     }
 };
@@ -145,12 +310,19 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signIn", null);
 __decorate([
-    (0, common_1.Get)('verify-email'),
-    __param(0, (0, common_1.Query)('token')),
+    (0, common_1.Post)('verify-email'),
+    __param(0, (0, common_1.Body)('email-token')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "verifyEmail", null);
+__decorate([
+    (0, common_1.Post)('resend-verification'),
+    __param(0, (0, common_1.Body)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "resendVerificationEmail", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)('refresh'),
@@ -187,12 +359,43 @@ __decorate([
 ], AuthController.prototype, "approveFamily", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('family-approvals/history'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getFamilyApprovalHistory", null);
+__decorate([
+    (0, common_1.Get)('registration-status/:email'),
+    __param(0, (0, common_1.Param)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "checkRegistrationStatus", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)('logout'),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('validate-session'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "validateSession", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('family-members'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getFamilyMembers", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [auth_service_1.AuthService,

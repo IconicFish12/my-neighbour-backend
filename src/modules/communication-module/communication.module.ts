@@ -5,6 +5,7 @@ import { ForumCommentManageModule } from './forum-comment-module/forum-comment-m
 import { DatabaseModule } from 'src/common/database/database.module';
 import { ResidentManageModule } from '../user-manage-module/resident-module/resident-manage.module';
 import { EmployeeManageModule } from '../user-manage-module/employee-module/employee-manage.module';
+import { ForumTagManageModule } from './forum-tag-module/forum-tag-manage.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { EmployeeManageModule } from '../user-manage-module/employee-module/empl
     ForumCommentManageModule,
     ResidentManageModule,
     EmployeeManageModule,
+    ForumTagManageModule,
   ],
   exports: [
     AnnouncementManageModule,

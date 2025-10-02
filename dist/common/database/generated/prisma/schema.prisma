@@ -381,21 +381,19 @@ model Bills {
 }
 
 model Payments {
-  id                    String        @id @default(uuid()) @map("pembayaran_id") @db.Uuid
-  amount                Float         @map("jumlah_pembayaran")
-  paymentDate           DateTime      @default(now()) @db.Timestamp()
-  paymentMethod         PaymentMethod @map("metode_pembayaran")
-  status                PaymentStatus @map("status_pembayaran")
-  residentId            String        @map("penghuni_id") @db.Uuid
-  resident              Residents     @relation(fields: [residentId], references: [id])
-  unitId                String?       @map("unit_id") @db.Uuid
-  unit                  Units?        @relation(fields: [unitId], references: [id])
-  processedByEmployeeId String?       @map("pegawai_id_pemroses") @db.Uuid
-  processedBy           Employees?    @relation(fields: [processedByEmployeeId], references: [id])
-  billId                String?       @map("tagihan_id") @db.Uuid
-  bill                  Bills?        @relation(fields: [billId], references: [id])
-  createdAt             DateTime      @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt             DateTime      @updatedAt @map("updated_at") @db.Timestamp()
+  id                    String     @id @default(uuid()) @map("pembayaran_id") @db.Uuid
+  amount                Float      @map("jumlah_pembayaran")
+  paymentDate           DateTime   @default(now()) @db.Timestamp()
+  residentId            String     @map("penghuni_id") @db.Uuid
+  resident              Residents  @relation(fields: [residentId], references: [id])
+  unitId                String?    @map("unit_id") @db.Uuid
+  unit                  Units?     @relation(fields: [unitId], references: [id])
+  processedByEmployeeId String?    @map("pegawai_id_pemroses") @db.Uuid
+  processedBy           Employees? @relation(fields: [processedByEmployeeId], references: [id])
+  billId                String?    @map("tagihan_id") @db.Uuid
+  bill                  Bills?     @relation(fields: [billId], references: [id])
+  createdAt             DateTime   @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt             DateTime   @updatedAt @map("updated_at") @db.Timestamp()
 
   @@map("tb_pembayaran")
 }

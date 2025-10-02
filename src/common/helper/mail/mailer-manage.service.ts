@@ -7,6 +7,7 @@ import {
   RegistrationEmailData,
   WelcomeEmailData,
 } from './mail-interface';
+import { ResidentStatus } from 'src/common/database/generated/prisma';
 
 @Injectable()
 export class MailerManageService {
@@ -115,6 +116,7 @@ export class MailerManageService {
           loginUrl: data.loginUrl,
           propertyName: data.propertyName,
           unitNumber: data.unitNumber,
+          residentStatus: ResidentStatus.HEAD_HOUSE_HOLD,
           year: new Date().getFullYear(),
         },
       });
@@ -167,7 +169,7 @@ export class MailerManageService {
       await this.sendMailWithRetry({
         to: data.headOfHouseholdEmail,
         subject: 'Persetujuan Diperlukan - Anggota Keluarga Baru',
-        template: 'family-member-approval-notification',
+        template: 'familyApproval',
         context: {
           headOfHouseholdName: data.headOfHouseholdName,
           familyMemberName: data.familyMemberName,
@@ -203,6 +205,7 @@ export class MailerManageService {
           loginUrl: data.loginUrl,
           propertyName: data.propertyName,
           unitNumber: data.unitNumber,
+          residentStatus: ResidentStatus.FAMILY_MEMBERS,
           year: new Date().getFullYear(),
         },
       });

@@ -7,8 +7,8 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   Request,
+  UnauthorizedException,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -20,6 +20,7 @@ import { SignInRequest } from '../../../dtos/requests/sign-in-request';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Request as expressRequest } from 'express';
 import { DatabaseService } from '../../../common/database/database.service';
+import { ResidentStatus } from 'src/common/database/generated/prisma';
 
 @Controller()
 export class AuthController {
@@ -53,9 +54,20 @@ export class AuthController {
     return this.authService.signIn(signInDto);
   }
 
-  @Get('verify-email')
-  verifyEmail(@Query('token') token: string) {
+  @Post('verify-email')
+  verifyEmail(@Body('email-token') token: string) {
+    if (!token) {
+      throw new BadRequestException('Verification token is required');
+    }
     return this.authService.verifyEmail(token);
+  }
+
+  @Post('resend-verification')
+  async resendVerificationEmail(@Body('email') email: string) {
+    if (!email) {
+      throw new BadRequestException('Email is required');
+    }
+    return this.authService.resendVerificationEmail(email);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -80,16 +92,19 @@ export class AuthController {
       },
     });
 
+    if (!userProfile) {
+      throw new BadRequestException('User profile not found');
+    }
+
     return {
       message: 'Profile retrieved successfully',
-      userId: userProfile,
+      user: userProfile,
     };
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('family-approvals')
   async getFamilyApprovals(@Request() req: expressRequest & { user: any }) {
-    // Get pending family approval requests for head of household
     const userId = req.user.sub as string;
 
     const resident = await this.prisma.residents.findFirst({
@@ -98,6 +113,12 @@ export class AuthController {
 
     if (!resident) {
       throw new BadRequestException('Resident profile not found');
+    }
+
+    if (resident.residentStatus !== ResidentStatus.HEAD_HOUSE_HOLD) {
+      throw new BadRequestException(
+        'Only head of household can view family approvals',
+      );
     }
 
     const pendingApprovals = await this.prisma.familyApprovals.findMany({
@@ -127,6 +148,7 @@ export class AuthController {
     return {
       message: 'Family approvals retrieved successfully',
       approvals: pendingApprovals,
+      totalPending: pendingApprovals.length,
     };
   }
 
@@ -137,7 +159,19 @@ export class AuthController {
     @Request() req: expressRequest & { user: any },
     @Body() approvalData: { action: 'APPROVE' | 'REJECT'; notes?: string },
   ) {
-    // Get resident ID from user
+    if (!approvalId) {
+      throw new BadRequestException('Approval ID is required');
+    }
+
+    if (
+      !approvalData.action ||
+      !['APPROVE', 'REJECT'].includes(approvalData.action)
+    ) {
+      throw new BadRequestException(
+        'Valid action (APPROVE or REJECT) is required',
+      );
+    }
+
     const userId = req.user.sub as string;
     const resident = await this.prisma.residents.findFirst({
       where: { userId: userId },
@@ -145,6 +179,12 @@ export class AuthController {
 
     if (!resident) {
       throw new BadRequestException('Resident profile not found');
+    }
+
+    if (resident.residentStatus !== ResidentStatus.HEAD_HOUSE_HOLD) {
+      throw new BadRequestException(
+        'Only head of household can approve family members',
+      );
     }
 
     return this.authService.approvalSystem({
@@ -155,10 +195,98 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('family-approvals/history')
+  async getFamilyApprovalHistory(
+    @Request() req: expressRequest & { user: any },
+  ) {
+    const userId = req.user.sub as string;
+
+    const resident = await this.prisma.residents.findFirst({
+      where: { userId: userId },
+    });
+
+    if (!resident) {
+      throw new BadRequestException('Resident profile not found');
+    }
+
+    if (resident.residentStatus !== ResidentStatus.HEAD_HOUSE_HOLD) {
+      throw new BadRequestException(
+        'Only head of household can view approval history',
+      );
+    }
+
+    const approvalHistory = await this.prisma.familyApprovals.findMany({
+      where: {
+        headOfHouseholdId: resident.id,
+        status: { in: ['APPROVED', 'REJECTED'] },
+      },
+      include: {
+        familyMember: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+                primaryEmail: true,
+                contactNumber: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        respondedAt: 'desc',
+      },
+    });
+
+    return {
+      message: 'Family approval history retrieved successfully',
+      history: approvalHistory,
+      totalProcessed: approvalHistory.length,
+    };
+  }
+
+  @Get('registration-status/:email')
+  async checkRegistrationStatus(@Param('email') email: string) {
+    if (!email) {
+      throw new BadRequestException('Email is required');
+    }
+
+    const user = await this.prisma.users.findUnique({
+      where: { primaryEmail: email },
+      include: {
+        Resident: true,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    return {
+      message: 'Registration status retrieved successfully',
+      status: {
+        emailVerified: user.emailVerificationToken === null,
+        registrationStatus: user.Resident?.registrationStatus,
+        residentStatus: user.Resident?.residentStatus,
+        pendingApproval: user.Resident?.pendingApproval || false,
+      },
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout(@Request() req: expressRequest & { user: any }) {
-    // Clear session token
     const userId = req.user.sub as string;
+
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
     await this.prisma.users.update({
       where: { id: userId },
       data: { sessionToken: null },
@@ -166,6 +294,93 @@ export class AuthController {
 
     return {
       message: 'Logout successful',
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('validate-session')
+  async validateSession(@Request() req: expressRequest & { user: any }) {
+    const userId = req.user.sub as string;
+
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        username: true,
+        fullName: true,
+        primaryEmail: true,
+        sessionToken: true,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid session');
+    }
+
+    return {
+      message: 'Session is valid',
+      user: {
+        id: user.id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.primaryEmail,
+      },
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('family-members')
+  async getFamilyMembers(@Request() req: expressRequest & { user: any }) {
+    const userId = req.user.sub as string;
+
+    const resident = await this.prisma.residents.findFirst({
+      where: { userId: userId },
+    });
+
+    if (!resident) {
+      throw new BadRequestException('Resident profile not found');
+    }
+
+    if (resident.residentStatus !== ResidentStatus.HEAD_HOUSE_HOLD) {
+      throw new BadRequestException(
+        'Only head of household can view family members',
+      );
+    }
+
+    const familyCode = await this.prisma.familyCodes.findFirst({
+      where: { headOfHousehold: resident.id },
+    });
+
+    if (!familyCode) {
+      return {
+        message: 'No family code found',
+        familyMembers: [],
+        familyCode: null,
+      };
+    }
+
+    const familyMembers = await this.prisma.residents.findMany({
+      where: {
+        familyCode: familyCode.code,
+        residentStatus: ResidentStatus.FAMILY_MEMBERS,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            primaryEmail: true,
+            contactNumber: true,
+          },
+        },
+      },
+    });
+
+    return {
+      message: 'Family members retrieved successfully',
+      familyMembers,
+      familyCode: familyCode.code,
+      totalMembers: familyMembers.length,
     };
   }
 }

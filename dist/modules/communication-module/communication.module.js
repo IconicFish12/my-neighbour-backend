@@ -14,6 +14,7 @@ const forum_comment_manage_module_1 = require("./forum-comment-module/forum-comm
 const database_module_1 = require("../../common/database/database.module");
 const resident_manage_module_1 = require("../user-manage-module/resident-module/resident-manage.module");
 const employee_manage_module_1 = require("../user-manage-module/employee-module/employee-manage.module");
+const forum_tag_manage_module_1 = require("./forum-tag-module/forum-tag-manage.module");
 let CommunicationModule = class CommunicationModule {
 };
 exports.CommunicationModule = CommunicationModule;
@@ -26,6 +27,7 @@ exports.CommunicationModule = CommunicationModule = __decorate([
             forum_comment_manage_module_1.ForumCommentManageModule,
             resident_manage_module_1.ResidentManageModule,
             employee_manage_module_1.EmployeeManageModule,
+            forum_tag_manage_module_1.ForumTagManageModule,
         ],
         exports: [
             announcement_manage_module_1.AnnouncementManageModule,

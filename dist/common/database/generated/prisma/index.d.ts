@@ -18519,8 +18519,6 @@ export namespace Prisma {
     id: string | null
     amount: number | null
     paymentDate: Date | null
-    paymentMethod: $Enums.PaymentMethod | null
-    status: $Enums.PaymentStatus | null
     residentId: string | null
     unitId: string | null
     processedByEmployeeId: string | null
@@ -18533,8 +18531,6 @@ export namespace Prisma {
     id: string | null
     amount: number | null
     paymentDate: Date | null
-    paymentMethod: $Enums.PaymentMethod | null
-    status: $Enums.PaymentStatus | null
     residentId: string | null
     unitId: string | null
     processedByEmployeeId: string | null
@@ -18547,8 +18543,6 @@ export namespace Prisma {
     id: number
     amount: number
     paymentDate: number
-    paymentMethod: number
-    status: number
     residentId: number
     unitId: number
     processedByEmployeeId: number
@@ -18571,8 +18565,6 @@ export namespace Prisma {
     id?: true
     amount?: true
     paymentDate?: true
-    paymentMethod?: true
-    status?: true
     residentId?: true
     unitId?: true
     processedByEmployeeId?: true
@@ -18585,8 +18577,6 @@ export namespace Prisma {
     id?: true
     amount?: true
     paymentDate?: true
-    paymentMethod?: true
-    status?: true
     residentId?: true
     unitId?: true
     processedByEmployeeId?: true
@@ -18599,8 +18589,6 @@ export namespace Prisma {
     id?: true
     amount?: true
     paymentDate?: true
-    paymentMethod?: true
-    status?: true
     residentId?: true
     unitId?: true
     processedByEmployeeId?: true
@@ -18700,8 +18688,6 @@ export namespace Prisma {
     id: string
     amount: number
     paymentDate: Date
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     unitId: string | null
     processedByEmployeeId: string | null
@@ -18733,8 +18719,6 @@ export namespace Prisma {
     id?: boolean
     amount?: boolean
     paymentDate?: boolean
-    paymentMethod?: boolean
-    status?: boolean
     residentId?: boolean
     unitId?: boolean
     processedByEmployeeId?: boolean
@@ -18751,8 +18735,6 @@ export namespace Prisma {
     id?: boolean
     amount?: boolean
     paymentDate?: boolean
-    paymentMethod?: boolean
-    status?: boolean
     residentId?: boolean
     unitId?: boolean
     processedByEmployeeId?: boolean
@@ -18769,8 +18751,6 @@ export namespace Prisma {
     id?: boolean
     amount?: boolean
     paymentDate?: boolean
-    paymentMethod?: boolean
-    status?: boolean
     residentId?: boolean
     unitId?: boolean
     processedByEmployeeId?: boolean
@@ -18787,8 +18767,6 @@ export namespace Prisma {
     id?: boolean
     amount?: boolean
     paymentDate?: boolean
-    paymentMethod?: boolean
-    status?: boolean
     residentId?: boolean
     unitId?: boolean
     processedByEmployeeId?: boolean
@@ -18797,7 +18775,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type PaymentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "paymentDate" | "paymentMethod" | "status" | "residentId" | "unitId" | "processedByEmployeeId" | "billId" | "createdAt" | "updatedAt", ExtArgs["result"]["payments"]>
+  export type PaymentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "paymentDate" | "residentId" | "unitId" | "processedByEmployeeId" | "billId" | "createdAt" | "updatedAt", ExtArgs["result"]["payments"]>
   export type PaymentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     resident?: boolean | ResidentsDefaultArgs<ExtArgs>
     unit?: boolean | Payments$unitArgs<ExtArgs>
@@ -18829,8 +18807,6 @@ export namespace Prisma {
       id: string
       amount: number
       paymentDate: Date
-      paymentMethod: $Enums.PaymentMethod
-      status: $Enums.PaymentStatus
       residentId: string
       unitId: string | null
       processedByEmployeeId: string | null
@@ -19267,8 +19243,6 @@ export namespace Prisma {
     readonly id: FieldRef<"Payments", 'String'>
     readonly amount: FieldRef<"Payments", 'Float'>
     readonly paymentDate: FieldRef<"Payments", 'DateTime'>
-    readonly paymentMethod: FieldRef<"Payments", 'PaymentMethod'>
-    readonly status: FieldRef<"Payments", 'PaymentStatus'>
     readonly residentId: FieldRef<"Payments", 'String'>
     readonly unitId: FieldRef<"Payments", 'String'>
     readonly processedByEmployeeId: FieldRef<"Payments", 'String'>
@@ -22126,8 +22100,6 @@ export namespace Prisma {
     id: 'id',
     amount: 'amount',
     paymentDate: 'paymentDate',
-    paymentMethod: 'paymentMethod',
-    status: 'status',
     residentId: 'residentId',
     unitId: 'unitId',
     processedByEmployeeId: 'processedByEmployeeId',
@@ -22425,34 +22397,6 @@ export namespace Prisma {
    * Reference to a field of type 'PaymentType[]'
    */
   export type ListEnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'PaymentMethod'
-   */
-  export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod'>
-    
-
-
-  /**
-   * Reference to a field of type 'PaymentMethod[]'
-   */
-  export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'PaymentStatus'
-   */
-  export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'PaymentStatus[]'
-   */
-  export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
     
 
 
@@ -23680,8 +23624,6 @@ export namespace Prisma {
     id?: UuidFilter<"Payments"> | string
     amount?: FloatFilter<"Payments"> | number
     paymentDate?: DateTimeFilter<"Payments"> | Date | string
-    paymentMethod?: EnumPaymentMethodFilter<"Payments"> | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFilter<"Payments"> | $Enums.PaymentStatus
     residentId?: UuidFilter<"Payments"> | string
     unitId?: UuidNullableFilter<"Payments"> | string | null
     processedByEmployeeId?: UuidNullableFilter<"Payments"> | string | null
@@ -23698,8 +23640,6 @@ export namespace Prisma {
     id?: SortOrder
     amount?: SortOrder
     paymentDate?: SortOrder
-    paymentMethod?: SortOrder
-    status?: SortOrder
     residentId?: SortOrder
     unitId?: SortOrderInput | SortOrder
     processedByEmployeeId?: SortOrderInput | SortOrder
@@ -23719,8 +23659,6 @@ export namespace Prisma {
     NOT?: PaymentsWhereInput | PaymentsWhereInput[]
     amount?: FloatFilter<"Payments"> | number
     paymentDate?: DateTimeFilter<"Payments"> | Date | string
-    paymentMethod?: EnumPaymentMethodFilter<"Payments"> | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFilter<"Payments"> | $Enums.PaymentStatus
     residentId?: UuidFilter<"Payments"> | string
     unitId?: UuidNullableFilter<"Payments"> | string | null
     processedByEmployeeId?: UuidNullableFilter<"Payments"> | string | null
@@ -23737,8 +23675,6 @@ export namespace Prisma {
     id?: SortOrder
     amount?: SortOrder
     paymentDate?: SortOrder
-    paymentMethod?: SortOrder
-    status?: SortOrder
     residentId?: SortOrder
     unitId?: SortOrderInput | SortOrder
     processedByEmployeeId?: SortOrderInput | SortOrder
@@ -23759,8 +23695,6 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Payments"> | string
     amount?: FloatWithAggregatesFilter<"Payments"> | number
     paymentDate?: DateTimeWithAggregatesFilter<"Payments"> | Date | string
-    paymentMethod?: EnumPaymentMethodWithAggregatesFilter<"Payments"> | $Enums.PaymentMethod
-    status?: EnumPaymentStatusWithAggregatesFilter<"Payments"> | $Enums.PaymentStatus
     residentId?: UuidWithAggregatesFilter<"Payments"> | string
     unitId?: UuidNullableWithAggregatesFilter<"Payments"> | string | null
     processedByEmployeeId?: UuidNullableWithAggregatesFilter<"Payments"> | string | null
@@ -25247,8 +25181,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     resident: ResidentsCreateNestedOneWithoutPaymentsInput
@@ -25261,8 +25193,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     unitId?: string | null
     processedByEmployeeId?: string | null
@@ -25275,8 +25205,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resident?: ResidentsUpdateOneRequiredWithoutPaymentsNestedInput
@@ -25289,8 +25217,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25303,8 +25229,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     unitId?: string | null
     processedByEmployeeId?: string | null
@@ -25317,8 +25241,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25327,8 +25249,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -26765,20 +26685,6 @@ export namespace Prisma {
     _max?: NestedEnumPaymentTypeFilter<$PrismaModel>
   }
 
-  export type EnumPaymentMethodFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
-  }
-
-  export type EnumPaymentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
-  }
-
   export type BillsNullableScalarRelationFilter = {
     is?: BillsWhereInput | null
     isNot?: BillsWhereInput | null
@@ -26788,8 +26694,6 @@ export namespace Prisma {
     id?: SortOrder
     amount?: SortOrder
     paymentDate?: SortOrder
-    paymentMethod?: SortOrder
-    status?: SortOrder
     residentId?: SortOrder
     unitId?: SortOrder
     processedByEmployeeId?: SortOrder
@@ -26806,8 +26710,6 @@ export namespace Prisma {
     id?: SortOrder
     amount?: SortOrder
     paymentDate?: SortOrder
-    paymentMethod?: SortOrder
-    status?: SortOrder
     residentId?: SortOrder
     unitId?: SortOrder
     processedByEmployeeId?: SortOrder
@@ -26820,8 +26722,6 @@ export namespace Prisma {
     id?: SortOrder
     amount?: SortOrder
     paymentDate?: SortOrder
-    paymentMethod?: SortOrder
-    status?: SortOrder
     residentId?: SortOrder
     unitId?: SortOrder
     processedByEmployeeId?: SortOrder
@@ -26832,26 +26732,6 @@ export namespace Prisma {
 
   export type PaymentsSumOrderByAggregateInput = {
     amount?: SortOrder
-  }
-
-  export type EnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
-    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
-  }
-
-  export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
-    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
   export type EnumContactRoleFilter<$PrismaModel = never> = {
@@ -28347,14 +28227,6 @@ export namespace Prisma {
     connect?: BillsWhereUniqueInput
   }
 
-  export type EnumPaymentMethodFieldUpdateOperationsInput = {
-    set?: $Enums.PaymentMethod
-  }
-
-  export type EnumPaymentStatusFieldUpdateOperationsInput = {
-    set?: $Enums.PaymentStatus
-  }
-
   export type ResidentsUpdateOneRequiredWithoutPaymentsNestedInput = {
     create?: XOR<ResidentsCreateWithoutPaymentsInput, ResidentsUncheckedCreateWithoutPaymentsInput>
     connectOrCreate?: ResidentsCreateOrConnectWithoutPaymentsInput
@@ -28915,40 +28787,6 @@ export namespace Prisma {
     _max?: NestedEnumPaymentTypeFilter<$PrismaModel>
   }
 
-  export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
-  }
-
-  export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
-  }
-
-  export type NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
-    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
-  }
-
-  export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
-    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
-  }
-
   export type NestedEnumContactRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.ContactRole | EnumContactRoleFieldRefInput<$PrismaModel>
     in?: $Enums.ContactRole[] | ListEnumContactRoleFieldRefInput<$PrismaModel>
@@ -29460,8 +29298,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     unit?: UnitsCreateNestedOneWithoutPaymentsInput
@@ -29473,8 +29309,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     unitId?: string | null
     processedByEmployeeId?: string | null
     billId?: string | null
@@ -29789,8 +29623,6 @@ export namespace Prisma {
     id?: UuidFilter<"Payments"> | string
     amount?: FloatFilter<"Payments"> | number
     paymentDate?: DateTimeFilter<"Payments"> | Date | string
-    paymentMethod?: EnumPaymentMethodFilter<"Payments"> | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFilter<"Payments"> | $Enums.PaymentStatus
     residentId?: UuidFilter<"Payments"> | string
     unitId?: UuidNullableFilter<"Payments"> | string | null
     processedByEmployeeId?: UuidNullableFilter<"Payments"> | string | null
@@ -30693,8 +30525,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     resident: ResidentsCreateNestedOneWithoutPaymentsInput
@@ -30706,8 +30536,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     unitId?: string | null
     billId?: string | null
@@ -31824,8 +31652,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     resident: ResidentsCreateNestedOneWithoutPaymentsInput
@@ -31837,8 +31663,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     processedByEmployeeId?: string | null
     billId?: string | null
@@ -32155,8 +31979,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     resident: ResidentsCreateNestedOneWithoutPaymentsInput
@@ -32168,8 +31990,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     unitId?: string | null
     processedByEmployeeId?: string | null
@@ -32853,8 +32673,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     unitId?: string | null
     processedByEmployeeId?: string | null
     billId?: string | null
@@ -32960,8 +32778,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unit?: UnitsUpdateOneWithoutPaymentsNestedInput
@@ -32973,8 +32789,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null
     billId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -32986,8 +32800,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null
     billId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33175,8 +32987,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     unitId?: string | null
     billId?: string | null
@@ -33316,8 +33126,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resident?: ResidentsUpdateOneRequiredWithoutPaymentsNestedInput
@@ -33329,8 +33137,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     billId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33342,8 +33148,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     billId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33505,8 +33309,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     processedByEmployeeId?: string | null
     billId?: string | null
@@ -33636,8 +33438,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resident?: ResidentsUpdateOneRequiredWithoutPaymentsNestedInput
@@ -33649,8 +33449,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null
     billId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33662,8 +33460,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null
     billId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33788,8 +33584,6 @@ export namespace Prisma {
     id?: string
     amount: number
     paymentDate?: Date | string
-    paymentMethod: $Enums.PaymentMethod
-    status: $Enums.PaymentStatus
     residentId: string
     unitId?: string | null
     processedByEmployeeId?: string | null
@@ -33801,8 +33595,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resident?: ResidentsUpdateOneRequiredWithoutPaymentsNestedInput
@@ -33814,8 +33606,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33827,8 +33617,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     residentId?: StringFieldUpdateOperationsInput | string
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     processedByEmployeeId?: NullableStringFieldUpdateOperationsInput | string | null

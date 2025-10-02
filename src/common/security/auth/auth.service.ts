@@ -8,10 +8,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { DatabaseService } from '../../../common/database/database.service';
-import { RegistRequest } from '../../../dtos/requests/regist-request';
+import {
+  RegistrationMethod,
+  RegistRequest,
+} from '../../../dtos/requests/regist-request';
 import { SignInRequest } from '../../../dtos/requests/sign-in-request';
 import { ConfigService } from '@nestjs/config';
 import {
+  RegistrationStatus,
   ResidentStatus,
   UnitStatus,
   UserRole,
@@ -60,7 +64,6 @@ export class AuthService extends UploadsService {
       }
 
       const hashedPassword = await bcrypt.hash(registRequest.password, 12);
-      const verificationToken = crypto.randomBytes(32).toString('hex');
       const verificationCode = this.mailerService.generateVerificationCode();
 
       const result = await this.prisma.$transaction(
@@ -74,10 +77,10 @@ export class AuthService extends UploadsService {
               primaryEmail: registRequest.primaryEmail,
               contactNumber: registRequest.contactNumber,
               dateOfBirth: registRequest.dateOfBirth,
-              emailVerificationToken: verificationToken,
               password: hashedPassword,
               role: UserRole.RESIDENT,
               gender: registRequest.gender,
+              emailVerificationToken: verificationCode,
             },
           });
 
@@ -87,8 +90,8 @@ export class AuthService extends UploadsService {
             emergencyContactNumber: registRequest.emergencyContactNumber,
             movedInDate: registRequest.movedInDate ?? new Date(),
             residentStatus: registRequest.residentType,
-            registrationStatus: 'PENDING',
-            registrationMethod: 'USER_DRIVEN',
+            registrationStatus: RegistrationStatus.PENDING,
+            registrationMethod: RegistrationMethod.USER_DRIVEN,
             pendingApproval:
               registRequest.residentType === ResidentStatus.FAMILY_MEMBERS,
           };
@@ -106,6 +109,8 @@ export class AuthService extends UploadsService {
             registRequest.residentType === ResidentStatus.FAMILY_MEMBERS
           ) {
             residentData.familyCode = registRequest.familyCode;
+            residentData.registrationStatus =
+              RegistrationStatus.AWAITING_FAMILY_APPROVAL;
           }
 
           const resident = await prisma.residents.create({
@@ -124,13 +129,6 @@ export class AuthService extends UploadsService {
             );
           }
 
-          if (registRequest.residentType === ResidentStatus.FAMILY_MEMBERS) {
-            await this.createFamilyApprovalRequest(
-              resident.id,
-              registRequest.familyCode!,
-            );
-          }
-
           return {
             user,
             resident,
@@ -141,6 +139,13 @@ export class AuthService extends UploadsService {
           timeout: 10000,
         },
       );
+
+      if (registRequest.residentType === ResidentStatus.FAMILY_MEMBERS) {
+        await this.createFamilyApprovalRequest(
+          result.resident.id,
+          registRequest.familyCode!,
+        );
+      }
 
       try {
         if (registRequest.residentType === ResidentStatus.FAMILY_MEMBERS) {
@@ -232,7 +237,7 @@ export class AuthService extends UploadsService {
     });
 
     if (!user) {
-      throw new BadRequestException('Invalid verification token');
+      throw new BadRequestException('Invalid or expired verification token');
     }
 
     await this.prisma.$transaction(async (prisma) => {
@@ -244,10 +249,13 @@ export class AuthService extends UploadsService {
       });
 
       if (user.Resident) {
-        const newStatus =
-          user.Resident.residentStatus === ResidentStatus.HEAD_HOUSE_HOLD
-            ? 'APPROVED'
-            : 'PENDING';
+        let newStatus: RegistrationStatus;
+
+        if (user.Resident.residentStatus === ResidentStatus.HEAD_HOUSE_HOLD) {
+          newStatus = RegistrationStatus.APPROVED;
+        } else {
+          newStatus = RegistrationStatus.AWAITING_FAMILY_APPROVAL;
+        }
 
         await prisma.residents.update({
           where: { id: user.Resident.id },
@@ -264,13 +272,15 @@ export class AuthService extends UploadsService {
 
     try {
       if (user.Resident) {
-        const uniqueCode = this.mailerService.generateUniqueCode();
-
         if (user.Resident.residentStatus === ResidentStatus.HEAD_HOUSE_HOLD) {
+          const familyCode = await this.prisma.familyCodes.findFirst({
+            where: { headResident: { id: user.Resident.id } },
+          });
+
           await this.mailerService.sendHeadOfHouseholdWelcomeEmail({
             fullName: user.fullName,
             email: user.primaryEmail,
-            uniqueCode,
+            uniqueCode: familyCode?.code as string,
             loginUrl: `${this.config.get('APP_URL')}/auth/sign-in`,
             propertyName: this.config.get(
               'PROPERTY_NAME',
@@ -286,7 +296,10 @@ export class AuthService extends UploadsService {
     }
 
     return {
-      message: 'Email verified successfully. You can now sign in.',
+      message:
+        user.Resident?.residentStatus === ResidentStatus.HEAD_HOUSE_HOLD
+          ? 'Email verified successfully. You can now sign in.'
+          : 'Email verified successfully. Waiting for approval from head of household.',
     };
   }
 
@@ -331,7 +344,7 @@ export class AuthService extends UploadsService {
         await prisma.residents.update({
           where: { id: approval.familyMemberId },
           data: {
-            registrationStatus: 'APPROVED',
+            registrationStatus: RegistrationStatus.APPROVED,
             pendingApproval: false,
             approvedByHeadOfHousehold: approvalRequest.headOfHouseholdId,
             approvalDate: new Date(),
@@ -349,7 +362,7 @@ export class AuthService extends UploadsService {
         await prisma.residents.update({
           where: { id: approval.familyMemberId },
           data: {
-            registrationStatus: 'REJECTED',
+            registrationStatus: RegistrationStatus.REJECTED,
             pendingApproval: false,
             rejectionReason: approvalRequest.notes,
           },
@@ -361,11 +374,13 @@ export class AuthService extends UploadsService {
 
     try {
       if (approvalRequest.action === 'APPROVE') {
-        const uniqueCode = this.mailerService.generateUniqueCode();
+        const familyCode = await this.ensureFamilyCode(
+          approval.headOfHouseholdId,
+        );
         await this.mailerService.sendFamilyMemberWelcomeEmail({
           fullName: approval.familyMember.user.fullName,
           email: approval.familyMember.user.primaryEmail,
-          uniqueCode,
+          uniqueCode: familyCode,
           loginUrl: `${this.config.get('APP_URL')}/auth/sign-in`,
           propertyName: this.config.get('PROPERTY_NAME', 'Property Management'),
           unitNumber: '',
@@ -465,15 +480,27 @@ export class AuthService extends UploadsService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (user.emailVerificationToken != null) {
+    if (user.emailVerificationToken !== null) {
       throw new UnauthorizedException(
         'Please verify your email before signing in',
       );
     }
 
-    if (user.Resident && user.Resident.registrationStatus !== 'APPROVED') {
+    if (
+      user.Resident &&
+      user.Resident.registrationStatus !== RegistrationStatus.APPROVED
+    ) {
+      const statusMessages = {
+        [RegistrationStatus.PENDING]:
+          'Your registration is still being processed',
+        [RegistrationStatus.REJECTED]: 'Your registration has been rejected',
+        [RegistrationStatus.AWAITING_FAMILY_APPROVAL]:
+          'Your registration is waiting for approval from head of household',
+      };
+
       throw new UnauthorizedException(
-        'Your registration is still pending approval',
+        statusMessages[user.Resident.registrationStatus] ||
+          'Your registration is still pending approval',
       );
     }
 
@@ -518,6 +545,73 @@ export class AuthService extends UploadsService {
     } catch {
       return false;
     }
+  }
+
+  async resendVerificationEmail(email: string) {
+    const user = await this.prisma.users.findUnique({
+      where: { primaryEmail: email },
+      include: {
+        Resident: {
+          include: { unit: true },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    if (user.emailVerificationToken === null) {
+      throw new BadRequestException('Email already verified');
+    }
+
+    const newVerificationCode = this.mailerService.generateVerificationCode();
+
+    await this.prisma.users.update({
+      where: { id: user.id },
+      data: {
+        emailVerificationToken: newVerificationCode,
+      },
+    });
+
+    try {
+      if (user.Resident?.residentStatus === ResidentStatus.FAMILY_MEMBERS) {
+        await this.mailerService.sendFamilyMemberVerificationEmail({
+          fullName: user.fullName,
+          registrationType: user.Resident.registrationMethod,
+          isAdminDriven: false,
+          email: user.primaryEmail,
+          verificationCode: newVerificationCode,
+          propertyName: this.config.get(
+            'APPLICATION_NAME',
+            'Property Management',
+          ),
+        });
+      } else {
+        await this.mailerService.sendHeadOfHouseholdVerificationEmail({
+          fullName: user.fullName,
+          email: user.primaryEmail,
+          verificationCode: newVerificationCode,
+          registrationType:
+            user.Resident?.registrationMethod || RegistrationMethod.USER_DRIVEN,
+          isAdminDriven: false,
+          unitNumber: user.Resident?.unit?.unitNumber,
+          propertyName: this.config.get(
+            'APPLICATION_NAME',
+            'Property Management',
+          ),
+        });
+      }
+    } catch (emailError) {
+      console.error('Resend verification email failed:', emailError);
+      throw new InternalServerErrorException(
+        'Failed to send verification email',
+      );
+    }
+
+    return {
+      message: 'Verification email sent successfully',
+    };
   }
 
   private async validateFamilyCode(familyCode: string) {

@@ -75,10 +75,27 @@ export declare class ResidentManageService {
             gender: import("src/common/database/generated/prisma").$Enums.Gender | null;
         };
         Payments: {
-            status: import("src/common/database/generated/prisma").$Enums.PaymentStatus;
             amount: number;
             paymentDate: Date;
-            paymentMethod: import("src/common/database/generated/prisma").$Enums.PaymentMethod;
+            bill: {
+                unit: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    status: import("src/common/database/generated/prisma").$Enums.UnitStatus;
+                    unitNumber: string;
+                    buildingName: string | null;
+                    unitOwnership: string[];
+                    floorNumber: number | null;
+                    numberOfRooms: number | null;
+                    priceSale: number;
+                    squareFootage: number | null;
+                    location: string;
+                };
+                amount: number;
+                type: import("src/common/database/generated/prisma").$Enums.PaymentType;
+                dueDate: Date;
+            } | null;
         }[];
         _count: {
             Complaints: number;

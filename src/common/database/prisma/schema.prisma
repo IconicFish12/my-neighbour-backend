@@ -31,11 +31,6 @@ enum Gender {
   NONE
 }
 
-enum ResidentStatus {
-  HEAD_HOUSE_HOLD
-  FAMILY_MEMBERS
-}
-
 enum PostedBy {
   RESIDENT
   EMPLOYEE
@@ -92,6 +87,11 @@ enum ComplaintStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+}
+
+enum ResidentStatus {
+  HEAD_HOUSE_HOLD
+  FAMILY_MEMBERS
 }
 
 enum RegistrationStatus {
@@ -384,8 +384,6 @@ model Payments {
   id                    String        @id @default(uuid()) @map("pembayaran_id") @db.Uuid
   amount                Float         @map("jumlah_pembayaran")
   paymentDate           DateTime      @default(now()) @db.Timestamp()
-  paymentMethod         PaymentMethod @map("metode_pembayaran")
-  status                PaymentStatus @map("status_pembayaran")
   residentId            String        @map("penghuni_id") @db.Uuid
   resident              Residents     @relation(fields: [residentId], references: [id])
   unitId                String?       @map("unit_id") @db.Uuid

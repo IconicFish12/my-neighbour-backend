@@ -5,7 +5,7 @@ import {
   MaxLength,
   IsStrongPassword,
 } from 'class-validator';
-import { IsUnique } from 'src/common/pipes/validators/is-unique-validators';
+// import { IsUnique } from 'src/common/pipes/validators/is-unique-validators';
 
 export class SignInRequest {
   @IsString({ message: 'Username harus berupa teks' })

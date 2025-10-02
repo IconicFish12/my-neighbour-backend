@@ -90,9 +90,15 @@ let ResidentManageService = class ResidentManageService {
                     Payments: {
                         select: {
                             amount: true,
-                            paymentMethod: true,
                             paymentDate: true,
-                            status: true,
+                            bill: {
+                                select: {
+                                    type: true,
+                                    amount: true,
+                                    dueDate: true,
+                                    unit: {},
+                                },
+                            },
                         },
                         orderBy: {
                             paymentDate: 'asc',
