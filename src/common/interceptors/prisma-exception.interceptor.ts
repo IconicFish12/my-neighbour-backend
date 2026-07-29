@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
+  CallHandler,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
   Injectable,
   NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  HttpStatus,
-  HttpException,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -18,31 +16,26 @@ import {
 } from '@prisma/client/runtime/library';
 
 @Injectable()
-export class PrismaErrorInterceptor implements NestInterceptor {
-  intercept(_context: ExecutionContext, next: CallHandler): Observable<any> {
+export class PrismaExceptionInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {
-        // Handle Prisma Client Known Request Error
         if (error instanceof PrismaClientKnownRequestError) {
           return throwError(() => this.handlePrismaKnownError(error));
         }
 
-        // Handle Prisma Client Validation Error
         if (error instanceof PrismaClientValidationError) {
           return throwError(() => this.handlePrismaValidationError(error));
         }
 
-        // Handle Prisma Client Unknown Request Error
         if (error instanceof PrismaClientUnknownRequestError) {
           return throwError(() => this.handlePrismaUnknownError(error));
         }
 
-        // Handle Prisma Client Initialization Error
         if (error instanceof PrismaClientInitializationError) {
           return throwError(() => this.handlePrismaInitError(error));
         }
 
-        // Return original error if not Prisma related
         return throwError(() => error);
       }),
     );
@@ -179,13 +172,13 @@ export class PrismaErrorInterceptor implements NestInterceptor {
 
       case 'P2021':
         return new HttpException(
-          'The table does not exist in the current database',
+          'The table does not exist in the database',
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
 
       case 'P2022':
         return new HttpException(
-          'The column does not exist in the current database',
+          'The column does not exist in the database',
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
 

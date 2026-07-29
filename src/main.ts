@@ -9,8 +9,9 @@ import {
   ExpressAdapter,
   type NestExpressApplication,
 } from '@nestjs/platform-express';
-import { PrismaErrorInterceptor } from './common/interceptors/exception-massage.interceptor';
 import { ResponseMappingInterceptor } from './common/interceptors/response-mapping.interceptor';
+import { PrismaExceptionInterceptor } from './common/interceptors/prisma-exception.interceptor';
+import { ErrorResponseInterceptor } from './common/interceptors/error-response.interceptor';
 
 let app: NestExpressApplication;
 
@@ -74,7 +75,8 @@ async function bootstrap(): Promise<NestExpressApplication> {
 
   app.useGlobalInterceptors(
     new ResponseMappingInterceptor(),
-    new PrismaErrorInterceptor(),
+    new PrismaExceptionInterceptor(),
+    new ErrorResponseInterceptor(),
   );
 
   await app.init();

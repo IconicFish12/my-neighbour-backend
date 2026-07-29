@@ -8,7 +8,8 @@ import {
   type NestExpressApplication,
 } from '@nestjs/platform-express';
 import { ResponseMappingInterceptor } from './common/interceptors/response-mapping.interceptor';
-import { PrismaErrorInterceptor } from './common/interceptors/exception-massage.interceptor';
+import { PrismaExceptionInterceptor } from './common/interceptors/prisma-exception.interceptor';
+import { ErrorResponseInterceptor } from './common/interceptors/error-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -32,7 +33,8 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(
     new ResponseMappingInterceptor(),
-    new PrismaErrorInterceptor(),
+    new PrismaExceptionInterceptor(),
+    new ErrorResponseInterceptor(),
   );
 
   app.useGlobalPipes(

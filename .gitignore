@@ -43,7 +43,7 @@ lerna-debug.log*
 .env.local
 
 # PrismaORM
-/src/common/database/generated/prisma
+/src/database/generated/prisma
 
 # temp directory
 .temp
