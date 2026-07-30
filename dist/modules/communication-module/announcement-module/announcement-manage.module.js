@@ -1,32 +1,54 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "AnnouncementManageModule", {
+    enumerable: true,
+    get: function() {
+        return AnnouncementManageModule;
+    }
+});
+const _common = require("@nestjs/common");
+const _platformexpress = require("@nestjs/platform-express");
+const _announcementmanageservice = require("./announcement-manage.service");
+const _announcementmanagecontroller = require("./announcement-manage.controller");
+const _databaseservice = require("../../../database/database.service");
+const _generalHelper = require("../../../common/helper/generalHelper");
+const _employeemanagemodule = require("../../user-manage-module/employee-module/employee-manage.module");
+const _uploadsconfiguration = require("../../../common/helper/uploads/uploads-configuration");
+function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnnouncementManageModule = void 0;
-const common_1 = require("@nestjs/common");
-const platform_express_1 = require("@nestjs/platform-express");
-const announcement_manage_service_1 = require("./announcement-manage.service");
-const announcement_manage_controller_1 = require("./announcement-manage.controller");
-const database_service_1 = require("../../../common/database/database.service");
-const generalHelper_1 = require("../../../common/helper/generalHelper");
-const employee_manage_module_1 = require("../../../modules/user-manage-module/employee-module/employee-manage.module");
-const uploads_configuration_1 = require("../../../common/helper/uploads/uploads-configuration");
+}
 let AnnouncementManageModule = class AnnouncementManageModule {
 };
-exports.AnnouncementManageModule = AnnouncementManageModule;
-exports.AnnouncementManageModule = AnnouncementManageModule = __decorate([
-    (0, common_1.Module)({
+AnnouncementManageModule = _ts_decorate([
+    (0, _common.Module)({
         imports: [
-            employee_manage_module_1.EmployeeManageModule,
-            platform_express_1.MulterModule.register(uploads_configuration_1.UploadsConfiguration.defaultConfig),
+            _employeemanagemodule.EmployeeManageModule,
+            _platformexpress.MulterModule.register(_uploadsconfiguration.UploadsConfiguration.defaultConfig)
         ],
-        controllers: [announcement_manage_controller_1.AnnouncementManageController],
-        providers: [announcement_manage_service_1.AnnouncementManageService, database_service_1.DatabaseService, generalHelper_1.GeneralHelper],
-        exports: [announcement_manage_service_1.AnnouncementManageService],
+        controllers: [
+            _announcementmanagecontroller.AnnouncementManageController
+        ],
+        providers: [
+            _announcementmanageservice.AnnouncementManageService,
+            _databaseservice.DatabaseService,
+            _generalHelper.GeneralHelper
+        ],
+        exports: [
+            _announcementmanageservice.AnnouncementManageService
+        ]
     })
 ], AnnouncementManageModule);
+
 //# sourceMappingURL=announcement-manage.module.js.map

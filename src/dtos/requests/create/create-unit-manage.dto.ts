@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { UnitStatus } from '../../../common/database/generated/prisma';
+import { UnitStatus } from '../../../database/generated/prisma/client.ts';
 import { IsUnique } from 'src/common/pipes/validators/is-unique-validators';
 import { Type } from 'class-transformer';
 

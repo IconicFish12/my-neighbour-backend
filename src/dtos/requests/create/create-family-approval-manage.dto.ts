@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsEnum,
 } from 'class-validator';
-import { ApprovalStatus } from 'src/common/database/generated/prisma';
+import { ApprovalStatus } from 'src/database/generated/prisma/client.ts';
 
 export class CreateFamilyApprovalManageDto {
   @IsUUID('4', {

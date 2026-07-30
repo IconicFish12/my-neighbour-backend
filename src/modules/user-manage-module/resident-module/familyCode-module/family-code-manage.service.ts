@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { CreateFamilyCodeManageDto } from '../../../../dtos/requests/create/create-family-code-manage.dto';
 import { UpdateFamilyCodeManageDto } from '../../../../dtos/requests/update/update-family-code-manage.dto';
-import { DatabaseService } from '../../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../../common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class FamilyCodeManageService {
@@ -75,8 +75,8 @@ export class FamilyCodeManageService {
       });
     } catch (error) {
       if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error as any).code === 'P2025'
       ) {
         throw new NotFoundException(
           `Kode keluarga dengan id: ${id} tidak ditemukan.`,
@@ -119,8 +119,8 @@ export class FamilyCodeManageService {
       });
     } catch (error) {
       if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error as any).code === 'P2025'
       ) {
         throw new NotFoundException(
           `Kode keluarga dengan id: ${id} tidak ditemukan.`,
@@ -150,8 +150,8 @@ export class FamilyCodeManageService {
       });
     } catch (error) {
       if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error as any).code === 'P2025'
       ) {
         throw new NotFoundException(
           `Kode keluarga dengan id: ${id} tidak ditemukan.`,

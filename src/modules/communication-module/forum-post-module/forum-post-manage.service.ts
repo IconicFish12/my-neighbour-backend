@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { CreateForumPostManageDto } from '../../../dtos/requests/create/create-forum-post-manage.dto';
 import { UpdateForumPostManageDto } from '../../../dtos/requests/update/update-forum-post-manage.dto';
-import { DatabaseService } from '../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 import { UploadsService } from 'src/common/helper/uploads/uploads.service';
 import { GeneralHelper } from 'src/common/helper/generalHelper';
 
@@ -69,8 +69,8 @@ export class ForumPostManageService extends UploadsService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Postingan forum dengan id: ${createRequest.tagId} tidak ditemukan`,
           );
@@ -190,8 +190,8 @@ export class ForumPostManageService extends UploadsService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Postingan forum dengan id: ${id} tidak ditemukan`,
           );
@@ -226,8 +226,8 @@ export class ForumPostManageService extends UploadsService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Postingan forum dengan id: ${id} tidak ditemukan`,
           );

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ResidentManageService } from './resident-manage.service';
 import { ResidentManageController } from './resident-manage.controller';
-import { DatabaseModule } from '../../../common/database/database.module';
-import { DatabaseService } from '../../../common/database/database.service';
+import { DatabaseModule } from '../../../database/database.module';
+import { DatabaseService } from '../../../database/database.service';
 import { GeneralHelper } from '../../../common/helper/generalHelper';
 import { FamilyApprovalManageModule } from './familyApproval-module/family-approval-manage.module';
 import { FamilyCodeManageModule } from './familyCode-module/family-code-manage.module';

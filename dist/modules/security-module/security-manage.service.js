@@ -1,23 +1,35 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SecurityManageService = void 0;
-const common_1 = require("@nestjs/common");
-const database_service_1 = require("../../common/database/database.service");
-const library_1 = require("../../common/database/generated/prisma/runtime/library");
-let SecurityManageService = class SecurityManageService {
-    prisma;
-    constructor(prisma) {
-        this.prisma = prisma;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "SecurityManageService", {
+    enumerable: true,
+    get: function() {
+        return SecurityManageService;
     }
+});
+const _common = require("@nestjs/common");
+const _databaseservice = require("../../database/database.service");
+const _clientts = require("../../database/generated/prisma/client.ts");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+let SecurityManageService = class SecurityManageService {
     async create(createRequest) {
         try {
             return await this.prisma.securityReports.create({
@@ -27,13 +39,16 @@ let SecurityManageService = class SecurityManageService {
                     incidentDate: createRequest.incidentDate,
                     location: createRequest.location,
                     status: createRequest.status,
-                    employee: { connect: { id: createRequest.employeeId } },
-                },
+                    employee: {
+                        connect: {
+                            id: createRequest.employeeId
+                        }
+                    }
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Laporan Keamanan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Laporan Keamanan');
         }
     }
     async findAll() {
@@ -48,26 +63,27 @@ let SecurityManageService = class SecurityManageService {
                                     firstName: true,
                                     lastName: true,
                                     contactNumber: true,
-                                    username: true,
-                                },
-                            },
-                        },
-                    },
+                                    username: true
+                                }
+                            }
+                        }
+                    }
                 },
                 orderBy: {
-                    title: 'asc',
-                },
+                    title: 'asc'
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Laporan Keamanan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Laporan Keamanan');
         }
     }
     async findOne(id) {
         try {
             return await this.prisma.securityReports.findUniqueOrThrow({
-                where: { id: id },
+                where: {
+                    id: id
+                },
                 include: {
                     employee: {
                         include: {
@@ -77,75 +93,88 @@ let SecurityManageService = class SecurityManageService {
                                     firstName: true,
                                     lastName: true,
                                     contactNumber: true,
-                                    username: true,
-                                },
-                            },
-                        },
-                    },
-                },
+                                    username: true
+                                }
+                            }
+                        }
+                    }
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Laporan Keamanan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Laporan Keamanan');
         }
     }
     async update(id, updateRequest) {
         try {
             const existData = await this.prisma.securityReports.findUniqueOrThrow({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
             if (!existData) {
-                throw new common_1.NotFoundException(`Data Laporan Keamanan dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Data Laporan Keamanan dengan id: ${id} tidak ditemukan`);
             }
             return await this.prisma.securityReports.update({
-                where: { id: id },
+                where: {
+                    id: id
+                },
                 data: {
                     title: updateRequest.title,
                     description: updateRequest.description,
                     incidentDate: updateRequest.incidentDate,
                     location: updateRequest.location,
                     status: updateRequest.status,
-                    employee: { connect: { id: updateRequest.employeeId } },
-                },
+                    employee: {
+                        connect: {
+                            id: updateRequest.employeeId
+                        }
+                    }
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             if (error.name === 'NotFoundError') {
-                throw new common_1.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
             }
-            if (error instanceof library_1.PrismaClientKnownRequestError) {
+            if (error instanceof _clientts.Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new common_1.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
+                    throw new _common.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
                 }
             }
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Laporan Keamanan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Laporan Keamanan');
         }
     }
     async remove(id) {
         try {
             return await this.prisma.securityReports.delete({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             if (error.name === 'NotFoundError') {
-                throw new common_1.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
             }
-            if (error instanceof library_1.PrismaClientKnownRequestError) {
+            if (error instanceof _clientts.Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new common_1.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
+                    throw new _common.NotFoundException(`Laporan Keamanan dengan id: ${id} tidak ditemukan`);
                 }
             }
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Laporan Keamanan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Laporan Keamanan');
         }
     }
+    constructor(prisma){
+        this.prisma = prisma;
+    }
 };
-exports.SecurityManageService = SecurityManageService;
-exports.SecurityManageService = SecurityManageService = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [database_service_1.DatabaseService])
+SecurityManageService = _ts_decorate([
+    (0, _common.Injectable)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _databaseservice.DatabaseService === "undefined" ? Object : _databaseservice.DatabaseService
+    ])
 ], SecurityManageService);
+
 //# sourceMappingURL=security-manage.service.js.map

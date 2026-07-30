@@ -1,1 +1,1 @@
-{"version":3,"file":"family-approve-response-dto.js","sourceRoot":"","sources":["../../../src/dtos/responses/family-approve-response-dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,wBAAwB;CAAG;AAAxC,4DAAwC"}
+{"version":3,"sources":["../../../src/dtos/responses/family-approve-response-dto.ts"],"sourcesContent":["export class FamilyApproveResponseDto {}\n"],"names":["FamilyApproveResponseDto"],"mappings":";;;;+BAAaA;;;eAAAA;;;AAAN,IAAA,AAAMA,2BAAN,MAAMA;AAA0B"}

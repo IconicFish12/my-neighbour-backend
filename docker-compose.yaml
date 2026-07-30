@@ -1,0 +1,53 @@
+name: MyNeighbour Backend system
+
+networks:
+  system-network:
+    driver: bridge
+
+volumes:
+  psql_data:
+  caddy_data:
+  caddy_config:
+
+services:
+  psql_db:
+    container_name: my-neighbour-db
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DATABASE: ${DB_NAME}
+    volumes:
+      - psql_data:/var/lib/postgresql/data
+    ports:
+      - '${DB_PORT}:5432'
+    networks:
+      - system-network
+
+  caddy_web_server:
+    container_name: my-neighbour-webServer
+    image: caddy:2.11-alpine
+    ports:
+      - 80:80
+      - 443:443/tcp
+      - 443:443/udp
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - system-network
+
+  main_system:
+    container_name: my-neighbour-backend
+    image: my-neighbour:${IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./.env
+    depends_on:
+      - psql_db
+    networks:
+      - system-network

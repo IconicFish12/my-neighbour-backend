@@ -1,0 +1,9 @@
+localhost:8000, :80, localhost:8080 {
+    responed "Hello World"
+
+    reverse_proxy /api/* localhost:5000 
+
+    headers {
+        
+    }
+}

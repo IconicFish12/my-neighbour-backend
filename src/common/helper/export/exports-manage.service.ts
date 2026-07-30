@@ -79,7 +79,7 @@ export class ExportsManageService implements OnModuleInit, OnModuleDestroy {
 
     try {
       await page.setContent(html, {
-        waitUntil: 'networkidle0',
+        waitUntil: 'networkidle0' as any,
         timeout: 30000,
       });
 

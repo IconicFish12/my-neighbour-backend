@@ -1,9 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateLeasesManageDto = void 0;
-const mapped_types_1 = require("@nestjs/mapped-types");
-const create_leases_manage_dto_1 = require("../create/create-leases-manage.dto");
-class UpdateLeasesManageDto extends (0, mapped_types_1.PartialType)(create_leases_manage_dto_1.CreateLeasesManageDto) {
-}
-exports.UpdateLeasesManageDto = UpdateLeasesManageDto;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UpdateLeasesManageDto", {
+    enumerable: true,
+    get: function() {
+        return UpdateLeasesManageDto;
+    }
+});
+const _mappedtypes = require("@nestjs/mapped-types");
+const _createleasesmanagedto = require("../create/create-leases-manage.dto");
+let UpdateLeasesManageDto = class UpdateLeasesManageDto extends (0, _mappedtypes.PartialType)(_createleasesmanagedto.CreateLeasesManageDto) {
+};
+
 //# sourceMappingURL=update-leases-manage.dto.js.map

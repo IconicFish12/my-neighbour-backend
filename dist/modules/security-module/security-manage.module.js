@@ -1,28 +1,53 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "SecurityManageModule", {
+    enumerable: true,
+    get: function() {
+        return SecurityManageModule;
+    }
+});
+const _common = require("@nestjs/common");
+const _securitymanageservice = require("./security-manage.service");
+const _securitymanagecontroller = require("./security-manage.controller");
+const _databasemodule = require("../../database/database.module");
+const _databaseservice = require("../../database/database.service");
+const _generalHelper = require("../../common/helper/generalHelper");
+const _usersmanagemodule = require("../user-manage-module/users-manage.module");
+function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SecurityManageModule = void 0;
-const common_1 = require("@nestjs/common");
-const security_manage_service_1 = require("./security-manage.service");
-const security_manage_controller_1 = require("./security-manage.controller");
-const database_module_1 = require("../../common/database/database.module");
-const database_service_1 = require("../../common/database/database.service");
-const generalHelper_1 = require("../../common/helper/generalHelper");
-const users_manage_module_1 = require("../user-manage-module/users-manage.module");
+}
 let SecurityManageModule = class SecurityManageModule {
 };
-exports.SecurityManageModule = SecurityManageModule;
-exports.SecurityManageModule = SecurityManageModule = __decorate([
-    (0, common_1.Module)({
-        imports: [database_module_1.DatabaseModule, users_manage_module_1.UsersManageModule],
-        controllers: [security_manage_controller_1.SecurityManageController],
-        providers: [security_manage_service_1.SecurityManageService, database_service_1.DatabaseService, generalHelper_1.GeneralHelper],
-        exports: [security_manage_service_1.SecurityManageService],
+SecurityManageModule = _ts_decorate([
+    (0, _common.Module)({
+        imports: [
+            _databasemodule.DatabaseModule,
+            _usersmanagemodule.UsersManageModule
+        ],
+        controllers: [
+            _securitymanagecontroller.SecurityManageController
+        ],
+        providers: [
+            _securitymanageservice.SecurityManageService,
+            _databaseservice.DatabaseService,
+            _generalHelper.GeneralHelper
+        ],
+        exports: [
+            _securitymanageservice.SecurityManageService
+        ]
     })
 ], SecurityManageModule);
+
 //# sourceMappingURL=security-manage.module.js.map

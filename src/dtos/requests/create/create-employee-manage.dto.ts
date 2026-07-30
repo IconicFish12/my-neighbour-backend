@@ -10,7 +10,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { EmployeeRole } from '../../../common/database/generated/prisma';
+import { EmployeeRole } from '../../../database/generated/prisma/client.ts';
 import { IsUnique } from 'src/common/pipes/validators/is-unique-validators';
 import { Type } from 'class-transformer';
 

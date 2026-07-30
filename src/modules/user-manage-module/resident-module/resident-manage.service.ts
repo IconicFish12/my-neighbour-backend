@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { CreateResidentManageDto } from '../../../dtos/requests/create/create-resident-manage.dto';
 import { UpdateResidentManageDto } from '../../../dtos/requests/update/update-resident-manage.dto';
-import { DatabaseService } from '../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class ResidentManageService {
@@ -151,8 +151,8 @@ export class ResidentManageService {
         throw error;
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Penghuni dengan id: ${id} tidak ditemukan`,
           );

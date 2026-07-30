@@ -9,7 +9,7 @@ import {
   Matches,
   ValidateIf,
 } from 'class-validator';
-import { ResidentStatus } from '../../../common/database/generated/prisma';
+import { ResidentStatus } from '../../../database/generated/prisma/client.ts';
 import { Type } from 'class-transformer';
 import { IsUnique } from 'src/common/pipes/validators/is-unique-validators';
 

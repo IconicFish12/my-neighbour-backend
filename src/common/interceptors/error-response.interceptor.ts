@@ -26,10 +26,7 @@ export class ErrorResponseInterceptor implements NestInterceptor {
           status = error.getStatus();
           const responseContent = error.getResponse();
 
-          if (
-            typeof responseContent === 'object' &&
-            responseContent !== null
-          ) {
+          if (typeof responseContent === 'object' && responseContent !== null) {
             message = (responseContent as any).message || error.message;
             errors = (responseContent as any).errors || null;
           } else {

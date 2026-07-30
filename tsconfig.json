@@ -1,25 +1,28 @@
 {
   "compilerOptions": {
+    "target": "ES2023",
     "module": "ESNext",
-    "moduelResolution": "bundler",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
     "strict": true,
+    "strictPropertyInitialization": false,
     "esModuleInterop": true,
     "resolvePackageJsonExports": true,
     "noEmit": true,
-    "allowImportingTsExtensions": true, 
-    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
     "noImplicitOverride": true,
-    "noUncheckedIndexesAccess": true,
+    "noUncheckedIndexedAccess": true,
     "isolatedModules": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
     "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "paths": {
+      "*": ["./*"],
+      "src/*": ["./src/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -27,6 +30,6 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "types": ["bun"]
+    "types": ["bun", "jest", "node"]
   }
 }

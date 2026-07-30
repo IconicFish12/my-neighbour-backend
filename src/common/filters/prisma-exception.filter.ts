@@ -7,19 +7,13 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import {
-  PrismaClientKnownRequestError,
-  PrismaClientValidationError,
-  PrismaClientRustPanicError,
-  PrismaClientInitializationError,
-} from '../database/generated/prisma/runtime/library';
+import { Prisma } from '../../database/generated/prisma/client.ts';
 import { Response } from 'express';
 
 @Catch(
-  PrismaClientKnownRequestError,
-  PrismaClientValidationError,
-  PrismaClientRustPanicError,
-  PrismaClientInitializationError,
+  Prisma.PrismaClientKnownRequestError,
+  Prisma.PrismaClientValidationError,
+  Prisma.PrismaClientInitializationError,
 )
 export class PrismaExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(PrismaExceptionFilter.name);
@@ -34,42 +28,42 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     let prismaCode: string | undefined;
     let targetField: string | undefined;
 
-    if (exception instanceof PrismaClientKnownRequestError) {
+    if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       prismaCode = exception.code;
       targetField = (exception.meta as any)?.target;
 
       switch (exception.code) {
-        case 'P2000': // The value provided for the column is too long for the column's type.
+        case 'P2000':
           status = HttpStatus.BAD_REQUEST;
           message = `Value too long for column: ${targetField || 'undefined'}.`;
           errorType = 'BadRequest';
           break;
-        case 'P2002': // Unique constraint violation
-          status = HttpStatus.CONFLICT; // 409 Conflict
-          message = `Data already exists fork ${targetField ? `column '${targetField}'` : 'unique entry'}.`;
+        case 'P2002':
+          status = HttpStatus.CONFLICT;
+          message = `Data already exists for ${targetField ? `column '${targetField}'` : 'unique entry'}.`;
           errorType = 'Conflict';
           break;
-        case 'P2003': // Foreign key constraint violation
-          status = HttpStatus.BAD_REQUEST; // Atau HttpStatus.CONFLICT
+        case 'P2003':
+          status = HttpStatus.BAD_REQUEST;
           message = `Data cannot be processed due to invalid relation.`;
           errorType = 'ForeignKeyConstraintViolation';
           break;
-        case 'P2025': // Record not found (digunakan oleh findUniqueOrThrow, findFirstOrThrow, update, delete)
-          status = HttpStatus.NOT_FOUND; // 404 Not Found
+        case 'P2025':
+          status = HttpStatus.NOT_FOUND;
           message = `Resource not found.`;
           errorType = 'NotFound';
           break;
-        case 'P1000': // Authentication failed
-        case 'P1001': // Can't reach database server
-        case 'P1002': // Database server timed out
-          status = HttpStatus.SERVICE_UNAVAILABLE; // Atau InternalServerError
+        case 'P1000':
+        case 'P1001':
+        case 'P1002':
+          status = HttpStatus.SERVICE_UNAVAILABLE;
           message =
             'Unable to connect to the database. Please try again later.';
           errorType = 'DatabaseConnectionError';
           break;
         default:
           status = HttpStatus.INTERNAL_SERVER_ERROR;
-          message = `A database error occurred: ${exception.message.split('\n')[0]}`; // Ambil baris pertama pesan error
+          message = `A database error occurred: ${exception.message.split('\n')[0]}`;
           errorType = 'PrismaKnownError';
           break;
       }
@@ -77,28 +71,20 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         `Prisma Known Error (${exception.code}): ${exception.message}`,
         exception.stack,
       );
-    } else if (exception instanceof PrismaClientValidationError) {
-      status = HttpStatus.BAD_REQUEST; // Atau INTERNAL_SERVER_ERROR jika ini bug internal
-      message = `Database query validation error. Please check your input.`; // Atau "Mohon hubungi administrator"
+    } else if (exception instanceof Prisma.PrismaClientValidationError) {
+      status = HttpStatus.BAD_REQUEST;
+      message = `Database query validation error. Please check your input.`;
       errorType = 'PrismaValidationError';
       this.logger.error(
         `Prisma Validation Error: ${exception.message}`,
         exception.stack,
       );
-    } else if (exception instanceof PrismaClientInitializationError) {
+    } else if (exception instanceof Prisma.PrismaClientInitializationError) {
       status = HttpStatus.SERVICE_UNAVAILABLE;
       message = 'The application failed to connect to the database on startup.';
       errorType = 'PrismaInitializationError';
       this.logger.error(
         `Prisma Initialization Error: ${exception.message}`,
-        exception.stack,
-      );
-    } else if (exception instanceof PrismaClientRustPanicError) {
-      status = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = 'A fatal error occurred in the Prisma database engine.';
-      errorType = 'PrismaRustPanicError';
-      this.logger.error(
-        `Prisma Rust Panic Error: ${exception.message}`,
         exception.stack,
       );
     }
@@ -107,7 +93,6 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       statusCode: status,
       message: message,
       error: errorType,
-      // Tambahkan detail Prisma Code jika di development atau untuk debugging
       prismaCode:
         process.env.NODE_ENV !== 'production' ? prismaCode : undefined,
       target: process.env.NODE_ENV !== 'production' ? targetField : undefined,

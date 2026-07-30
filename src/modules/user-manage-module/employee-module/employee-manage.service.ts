@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { CreateEmployeeManageDto } from '../../../dtos/requests/create/create-employee-manage.dto';
 import { UpdateEmployeeManageDto } from '../../../dtos/requests/update/update-employee-manage.dto';
-import { DatabaseService } from '../../../common/database/database.service';
+import { DatabaseService } from '../../../database/database.service';
 import { GeneralHelper } from '../../../common/helper/generalHelper';
-import { PrismaClientKnownRequestError } from '../../../common/database/generated/prisma/runtime/library';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class EmployeeManageService {
@@ -170,8 +170,8 @@ export class EmployeeManageService {
         throw error;
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Pegawai dengan id: ${id} tidak ditemukan`,
           );
@@ -202,8 +202,8 @@ export class EmployeeManageService {
         throw error;
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Pegawai dengan id: ${id} tidak ditemukan`,
           );

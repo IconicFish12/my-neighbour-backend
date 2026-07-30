@@ -10,7 +10,7 @@ import {
   IsEnum,
   IsArray,
 } from 'class-validator';
-import { UserRole } from '../../../common/database/generated/prisma';
+import { UserRole } from '../../../database/generated/prisma/client.ts';
 import { IsUnique } from 'src/common/pipes/validators/is-unique-validators';
 
 export class CreateForumPostManageDto {

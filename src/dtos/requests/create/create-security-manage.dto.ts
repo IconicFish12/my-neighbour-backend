@@ -7,7 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { MaintenanceStatus } from '../../../common/database/generated/prisma';
+import { MaintenanceStatus } from '../../../database/generated/prisma/client.ts';
 import { Type } from 'class-transformer';
 
 export class CreateSecurityManageDto {

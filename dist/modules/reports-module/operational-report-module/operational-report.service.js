@@ -1,96 +1,129 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OperationalReportService = void 0;
-const common_1 = require("@nestjs/common");
-const database_service_1 = require("../../../common/database/database.service");
-let OperationalReportService = class OperationalReportService {
-    prisma;
-    constructor(prisma) {
-        this.prisma = prisma;
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */ /* eslint-disable @typescript-eslint/no-unsafe-member-access */ /* eslint-disable @typescript-eslint/no-unsafe-return */ "use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "OperationalReportService", {
+    enumerable: true,
+    get: function() {
+        return OperationalReportService;
     }
+});
+const _common = require("@nestjs/common");
+const _databaseservice = require("../../../database/database.service");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+let OperationalReportService = class OperationalReportService {
     async getComplaintStatistics(filter) {
         const whereClause = this.buildWhereClause(filter);
         const totalComplaints = await this.prisma.complaints.count({
-            where: whereClause,
+            where: whereClause
         });
         const complaintsByCategory = await this.prisma.complaints.groupBy({
-            by: ['category'],
+            by: [
+                'category'
+            ],
             _count: {
-                id: true,
+                id: true
             },
-            where: whereClause,
+            where: whereClause
         });
         const complaintsByStatus = await this.prisma.complaints.groupBy({
-            by: ['status'],
+            by: [
+                'status'
+            ],
             _count: {
-                id: true,
+                id: true
             },
-            where: whereClause,
+            where: whereClause
         });
         return {
             totalComplaints,
             complaintsByCategory,
-            complaintsByStatus,
+            complaintsByStatus
         };
     }
     async getSecurityReportStatistics(filter) {
         const whereClause = this.buildWhereClause(filter);
         const totalSecurityReports = await this.prisma.securityReports.count({
-            where: whereClause,
+            where: whereClause
         });
         const reportsByStatus = await this.prisma.securityReports.groupBy({
-            by: ['status'],
+            by: [
+                'status'
+            ],
             _count: {
-                id: true,
+                id: true
             },
-            where: whereClause,
+            where: whereClause
         });
         return {
             totalSecurityReports,
-            reportsByStatus,
+            reportsByStatus
         };
     }
     async getUnitAndResidentStatistics() {
         const totalResidents = await this.prisma.residents.count();
         const totalUnits = await this.prisma.units.count();
         const unitsByStatus = await this.prisma.units.groupBy({
-            by: ['status'],
+            by: [
+                'status'
+            ],
             _count: {
-                id: true,
-            },
+                id: true
+            }
         });
         return {
             totalResidents,
             totalUnits,
-            unitsByStatus,
+            unitsByStatus
         };
     }
     buildWhereClause(filter) {
         const where = {};
         if (filter.startDate) {
-            where.createdAt = { gte: new Date(filter.startDate) };
+            where.createdAt = {
+                gte: new Date(filter.startDate)
+            };
         }
         if (filter.endDate) {
-            where.createdAt = { ...where.createdAt, lte: new Date(filter.endDate) };
+            where.createdAt = {
+                ...where.createdAt,
+                lte: new Date(filter.endDate)
+            };
         }
         if (filter.unitStatus) {
-            where.unit = { status: filter.unitStatus };
+            where.unit = {
+                status: filter.unitStatus
+            };
         }
         return where;
     }
+    constructor(prisma){
+        this.prisma = prisma;
+    }
 };
-exports.OperationalReportService = OperationalReportService;
-exports.OperationalReportService = OperationalReportService = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [database_service_1.DatabaseService])
+OperationalReportService = _ts_decorate([
+    (0, _common.Injectable)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _databaseservice.DatabaseService === "undefined" ? Object : _databaseservice.DatabaseService
+    ])
 ], OperationalReportService);
+
 //# sourceMappingURL=operational-report.service.js.map

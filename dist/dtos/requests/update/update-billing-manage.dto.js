@@ -1,9 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateBillingManageDto = void 0;
-const mapped_types_1 = require("@nestjs/mapped-types");
-const create_billing_manage_dto_1 = require("../create/create-billing-manage.dto");
-class UpdateBillingManageDto extends (0, mapped_types_1.PartialType)(create_billing_manage_dto_1.CreateBillingManageDto) {
-}
-exports.UpdateBillingManageDto = UpdateBillingManageDto;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UpdateBillingManageDto", {
+    enumerable: true,
+    get: function() {
+        return UpdateBillingManageDto;
+    }
+});
+const _mappedtypes = require("@nestjs/mapped-types");
+const _createbillingmanagedto = require("../create/create-billing-manage.dto");
+let UpdateBillingManageDto = class UpdateBillingManageDto extends (0, _mappedtypes.PartialType)(_createbillingmanagedto.CreateBillingManageDto) {
+};
+
 //# sourceMappingURL=update-billing-manage.dto.js.map

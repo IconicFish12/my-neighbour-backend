@@ -9,7 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Gender, UserRole } from '../../../common/database/generated/prisma';
+import { Gender, UserRole } from '../../../database/generated/prisma/client.ts';
 import { Type } from 'class-transformer';
 import { IsUnique } from 'src/common/pipes/validators/is-unique-validators';
 

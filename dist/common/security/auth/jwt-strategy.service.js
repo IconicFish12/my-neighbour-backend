@@ -1,55 +1,62 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.JwtStrategyService = void 0;
-const common_1 = require("@nestjs/common");
-const passport_1 = require("@nestjs/passport");
-const passport_jwt_1 = require("passport-jwt");
-const database_service_1 = require("../../../common/database/database.service");
-const config_1 = require("@nestjs/config");
-let JwtStrategyService = class JwtStrategyService extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
-    prisma;
-    configService;
-    constructor(prisma, configService) {
-        super({
-            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            secretOrKey: configService.get('JWT_SECRET') || '',
-        });
-        this.prisma = prisma;
-        this.configService = configService;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "JwtStrategyService", {
+    enumerable: true,
+    get: function() {
+        return JwtStrategyService;
     }
+});
+const _common = require("@nestjs/common");
+const _passport = require("@nestjs/passport");
+const _passportjwt = require("passport-jwt");
+const _databaseservice = require("../../../database/database.service");
+const _config = require("@nestjs/config");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+let JwtStrategyService = class JwtStrategyService extends (0, _passport.PassportStrategy)(_passportjwt.Strategy) {
     async validate(payload) {
         const user = await this.prisma.users.findUnique({
-            where: { id: payload.sub },
+            where: {
+                id: payload.sub
+            },
             include: {
                 Resident: {
                     include: {
-                        unit: true,
-                    },
+                        unit: true
+                    }
                 },
-                Employee: true,
-            },
+                Employee: true
+            }
         });
         if (!user) {
-            throw new common_1.UnauthorizedException('Invalid token');
+            throw new _common.UnauthorizedException('Invalid token');
         }
         if (!user) {
-            throw new common_1.UnauthorizedException('User not found');
+            throw new _common.UnauthorizedException('User not found');
         }
         if (user.emailVerificationToken !== null) {
-            throw new common_1.UnauthorizedException('Email not verified');
+            throw new _common.UnauthorizedException('Email not verified');
         }
         if (!user.sessionToken) {
-            throw new common_1.UnauthorizedException('Session expired. Please login again.');
+            throw new _common.UnauthorizedException('Session expired. Please login again.');
         }
         return {
             sub: user.id,
@@ -57,14 +64,24 @@ let JwtStrategyService = class JwtStrategyService extends (0, passport_1.Passpor
             email: user.primaryEmail,
             fullName: user.fullName,
             role: user.role,
-            resident: user.Resident,
+            resident: user.Resident
         };
     }
+    constructor(prisma, configService){
+        super({
+            jwtFromRequest: _passportjwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
+            secretOrKey: configService.get('JWT_SECRET') || ''
+        }), this.prisma = prisma, this.configService = configService;
+    }
 };
-exports.JwtStrategyService = JwtStrategyService;
-exports.JwtStrategyService = JwtStrategyService = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [database_service_1.DatabaseService,
-        config_1.ConfigService])
+JwtStrategyService = _ts_decorate([
+    (0, _common.Injectable)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _databaseservice.DatabaseService === "undefined" ? Object : _databaseservice.DatabaseService,
+        typeof _config.ConfigService === "undefined" ? Object : _config.ConfigService
+    ])
 ], JwtStrategyService);
+
 //# sourceMappingURL=jwt-strategy.service.js.map

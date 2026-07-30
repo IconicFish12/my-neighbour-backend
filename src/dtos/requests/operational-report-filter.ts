@@ -1,5 +1,5 @@
 import { IsOptional, IsDateString, IsEnum } from 'class-validator';
-import { UserRole } from '../../common/database/generated/prisma';
+import { UserRole } from '../../database/generated/prisma/client.ts';
 
 export class OperationalReportFilterDto {
   @IsOptional()

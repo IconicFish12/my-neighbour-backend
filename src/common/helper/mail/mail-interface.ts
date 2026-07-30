@@ -1,4 +1,4 @@
-import { RegistrationMethod } from '../../../common/database/generated/prisma';
+import { RegistrationMethod } from '../../../database/generated/prisma/client.ts';
 
 export interface RegistrationEmailData {
   fullName: string;

@@ -1,36 +1,47 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ForumCommentManageService = void 0;
-const common_1 = require("@nestjs/common");
-const database_service_1 = require("../../../common/database/database.service");
-const library_1 = require("../../../common/database/generated/prisma/runtime/library");
-let ForumCommentManageService = class ForumCommentManageService {
-    prisma;
-    constructor(prisma) {
-        this.prisma = prisma;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "ForumCommentManageService", {
+    enumerable: true,
+    get: function() {
+        return ForumCommentManageService;
     }
+});
+const _common = require("@nestjs/common");
+const _databaseservice = require("../../../database/database.service");
+const _clientts = require("../../../database/generated/prisma/client.ts");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+let ForumCommentManageService = class ForumCommentManageService {
     async create(createRequest) {
         try {
             return await this.prisma.forumComments.create({
                 data: {
                     content: createRequest.content,
                     postId: createRequest.postId,
-                    userId: createRequest.userId,
-                },
+                    userId: createRequest.userId
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Comment post ');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Comment post ');
         }
     }
     async findAll() {
@@ -43,24 +54,25 @@ let ForumCommentManageService = class ForumCommentManageService {
                             firstName: true,
                             lastName: true,
                             role: true,
-                            username: true,
-                        },
-                    },
+                            username: true
+                        }
+                    }
                 },
                 orderBy: {
-                    createdAt: 'asc',
-                },
+                    createdAt: 'asc'
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Comment post ');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Comment post ');
         }
     }
     async findOne(id) {
         try {
             return await this.prisma.forumComments.findUniqueOrThrow({
-                where: { id: id },
+                where: {
+                    id: id
+                },
                 include: {
                     user: {
                         select: {
@@ -68,85 +80,96 @@ let ForumCommentManageService = class ForumCommentManageService {
                             firstName: true,
                             lastName: true,
                             role: true,
-                            username: true,
-                        },
+                            username: true
+                        }
                     },
                     post: {
                         select: {
                             title: true,
                             content: true,
                             attachments: true,
-                            tags: true,
-                        },
-                    },
-                },
+                            tags: true
+                        }
+                    }
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Comment post ');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Comment post ');
         }
     }
     async update(id, updateRequest) {
         try {
             const existData = await this.prisma.forumComments.findUniqueOrThrow({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
             if (!existData) {
-                throw new common_1.NotFoundException(`Data Comment post  dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Data Comment post  dengan id: ${id} tidak ditemukan`);
             }
             return await this.prisma.forumComments.update({
-                where: { id: id },
+                where: {
+                    id: id
+                },
                 data: {
                     content: updateRequest.content,
                     postId: updateRequest.postId,
                     userId: updateRequest.userId,
-                    updatedAt: new Date(),
-                },
+                    updatedAt: new Date()
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             if (error.name === 'NotFoundError') {
-                throw new common_1.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
             }
-            if (error instanceof library_1.PrismaClientKnownRequestError) {
+            if (error instanceof _clientts.Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new common_1.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
+                    throw new _common.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
                 }
             }
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Comment post ');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Comment post ');
         }
     }
     async remove(id) {
         try {
             const existData = await this.prisma.forumComments.findUnique({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
             if (!existData) {
-                throw new common_1.NotFoundException(`Data Comment post  dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Data Comment post  dengan id: ${id} tidak ditemukan`);
             }
             return await this.prisma.forumComments.delete({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             if (error.name === 'NotFoundError') {
-                throw new common_1.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
             }
-            if (error instanceof library_1.PrismaClientKnownRequestError) {
+            if (error instanceof _clientts.Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new common_1.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
+                    throw new _common.NotFoundException(`Comment post  dengan id: ${id} tidak ditemukan`);
                 }
             }
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Comment post ');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Comment post ');
         }
     }
+    constructor(prisma){
+        this.prisma = prisma;
+    }
 };
-exports.ForumCommentManageService = ForumCommentManageService;
-exports.ForumCommentManageService = ForumCommentManageService = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [database_service_1.DatabaseService])
+ForumCommentManageService = _ts_decorate([
+    (0, _common.Injectable)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _databaseservice.DatabaseService === "undefined" ? Object : _databaseservice.DatabaseService
+    ])
 ], ForumCommentManageService);
+
 //# sourceMappingURL=forum-comment-manage.service.js.map

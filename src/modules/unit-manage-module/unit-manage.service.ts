@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { CreateUnitManageDto } from '../../dtos/requests/create/create-unit-manage.dto';
 import { UpdateUnitManageDto } from '../../dtos/requests/update/update-unit-manage.dto';
-import { DatabaseService } from '../../common/database/database.service';
+import { DatabaseService } from '../../database/database.service';
 import { GeneralHelper } from '../../common/helper/generalHelper';
-import { PrismaClientKnownRequestError } from '../../common/database/generated/prisma/runtime/library';
-import { UnitStatus } from 'src/common/database/generated/prisma';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
+import { UnitStatus } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class UnitManageService {
@@ -145,8 +145,8 @@ export class UnitManageService {
         throw error;
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Unit Hunian dengan id: ${id} tidak ditemukan`,
           );
@@ -179,8 +179,8 @@ export class UnitManageService {
         throw error;
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Unit Hunian dengan id: ${id} tidak ditemukan`,
           );

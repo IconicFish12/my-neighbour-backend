@@ -19,8 +19,8 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { SignInRequest } from '../../../dtos/requests/sign-in-request';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Request as expressRequest } from 'express';
-import { DatabaseService } from '../../../common/database/database.service';
-import { ResidentStatus } from 'src/common/database/generated/prisma';
+import { DatabaseService } from '../../../database/database.service';
+import { ResidentStatus } from 'src/database/generated/prisma/client.ts';
 
 @Controller()
 export class AuthController {

@@ -7,7 +7,7 @@ import {
   RegistrationEmailData,
   WelcomeEmailData,
 } from './mail-interface';
-import { ResidentStatus } from 'src/common/database/generated/prisma';
+import { ResidentStatus } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class MailerManageService {

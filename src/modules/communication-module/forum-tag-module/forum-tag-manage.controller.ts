@@ -11,7 +11,6 @@ import { ForumTagManageService } from './forum-tag-manage.service';
 import { CreateForumTagManageDto } from '../../../dtos/requests/create/create-forum-tag-manage.dto';
 import { UpdateForumTagManageDto } from '../../../dtos/requests/update/update-forum-tag-manage.dto';
 
-
 @Controller('forum-tag-manage')
 export class ForumTagManageController {
   constructor(private readonly forumTagManageService: ForumTagManageService) {}

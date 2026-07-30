@@ -1,7 +1,7 @@
-import { UploadsCnfiguration } from './uploads-cnfiguration';
+import { UploadsConfiguration } from '../uploads-configuration';
 
-describe('UploadsCnfiguration', () => {
+describe('UploadsConfiguration', () => {
   it('should be defined', () => {
-    expect(new UploadsCnfiguration()).toBeDefined();
+    expect(new UploadsConfiguration()).toBeDefined();
   });
 });

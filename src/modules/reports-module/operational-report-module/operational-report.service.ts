@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/common/database/database.service';
+import { DatabaseService } from 'src/database/database.service';
 import { OperationalReportFilterDto } from 'src/dtos/requests/operational-report-filter';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ExportsManageService } from '../../../src/common/helper/exports/exports-manage.service';
+import { ExportsManageService } from '../../../src/common/helper/export/exports-manage.service';
 
 describe('ExportsManageService', () => {
   let service: ExportsManageService;

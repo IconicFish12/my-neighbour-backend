@@ -1,9 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateSecurityManageDto = void 0;
-const mapped_types_1 = require("@nestjs/mapped-types");
-const create_security_manage_dto_1 = require("../create/create-security-manage.dto");
-class UpdateSecurityManageDto extends (0, mapped_types_1.PartialType)(create_security_manage_dto_1.CreateSecurityManageDto) {
-}
-exports.UpdateSecurityManageDto = UpdateSecurityManageDto;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UpdateSecurityManageDto", {
+    enumerable: true,
+    get: function() {
+        return UpdateSecurityManageDto;
+    }
+});
+const _mappedtypes = require("@nestjs/mapped-types");
+const _createsecuritymanagedto = require("../create/create-security-manage.dto");
+let UpdateSecurityManageDto = class UpdateSecurityManageDto extends (0, _mappedtypes.PartialType)(_createsecuritymanagedto.CreateSecurityManageDto) {
+};
+
 //# sourceMappingURL=update-security-manage.dto.js.map

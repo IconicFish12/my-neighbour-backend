@@ -1,41 +1,58 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "ReportsManageModule", {
+    enumerable: true,
+    get: function() {
+        return ReportsManageModule;
+    }
+});
+const _common = require("@nestjs/common");
+const _databasemodule = require("../../database/database.module");
+const _unitmanagemodule = require("../unit-manage-module/unit-manage.module");
+const _usersmanagemodule = require("../user-manage-module/users-manage.module");
+const _securitymanagemodule = require("../security-module/security-manage.module");
+const _operationalreportmodule = require("./operational-report-module/operational-report.module");
+const _paymentsreportmodule = require("./payments-report-module/payments-report.module");
+const _requestmanagemodule = require("../request-module/request-manage.module");
+const _communicationmodule = require("../communication-module/communication.module");
+const _contactmanagemodule = require("../contact-module/contact-manage.module");
+const _financialmodule = require("../financial-module/financial.module");
+function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReportsManageModule = void 0;
-const common_1 = require("@nestjs/common");
-const database_module_1 = require("../../common/database/database.module");
-const unit_manage_module_1 = require("../unit-manage-module/unit-manage.module");
-const users_manage_module_1 = require("../user-manage-module/users-manage.module");
-const security_manage_module_1 = require("../security-module/security-manage.module");
-const operational_report_module_1 = require("./operational-report-module/operational-report.module");
-const payments_report_module_1 = require("./payments-report-module/payments-report.module");
-const request_manage_module_1 = require("../request-module/request-manage.module");
-const communication_module_1 = require("../communication-module/communication.module");
-const contact_manage_module_1 = require("../contact-module/contact-manage.module");
-const financial_module_1 = require("../financial-module/financial.module");
+}
 let ReportsManageModule = class ReportsManageModule {
 };
-exports.ReportsManageModule = ReportsManageModule;
-exports.ReportsManageModule = ReportsManageModule = __decorate([
-    (0, common_1.Module)({
+ReportsManageModule = _ts_decorate([
+    (0, _common.Module)({
         imports: [
-            database_module_1.DatabaseModule,
-            unit_manage_module_1.UnitManageModule,
-            request_manage_module_1.RequestManageModule,
-            users_manage_module_1.UsersManageModule,
-            security_manage_module_1.SecurityManageModule,
-            operational_report_module_1.OperationalReportModule,
-            contact_manage_module_1.ContactManageModule,
-            communication_module_1.CommunicationModule,
-            financial_module_1.FinancialModule,
-            payments_report_module_1.PaymentsReportModule,
+            _databasemodule.DatabaseModule,
+            _unitmanagemodule.UnitManageModule,
+            _requestmanagemodule.RequestManageModule,
+            _usersmanagemodule.UsersManageModule,
+            _securitymanagemodule.SecurityManageModule,
+            _operationalreportmodule.OperationalReportModule,
+            _contactmanagemodule.ContactManageModule,
+            _communicationmodule.CommunicationModule,
+            _financialmodule.FinancialModule,
+            _paymentsreportmodule.PaymentsReportModule
         ],
-        exports: [operational_report_module_1.OperationalReportModule, payments_report_module_1.PaymentsReportModule],
+        exports: [
+            _operationalreportmodule.OperationalReportModule,
+            _paymentsreportmodule.PaymentsReportModule
+        ]
     })
 ], ReportsManageModule);
+
 //# sourceMappingURL=reports-manage.module.js.map

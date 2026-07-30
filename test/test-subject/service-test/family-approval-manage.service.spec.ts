@@ -9,7 +9,9 @@ describe('FamilyApprovalManageService', () => {
       providers: [FamilyApprovalManageService],
     }).compile();
 
-    service = module.get<FamilyApprovalManageService>(FamilyApprovalManageService);
+    service = module.get<FamilyApprovalManageService>(
+      FamilyApprovalManageService,
+    );
   });
 
   it('should be defined', () => {

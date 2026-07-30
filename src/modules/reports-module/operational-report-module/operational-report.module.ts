@@ -6,8 +6,8 @@ import { CommunicationModule } from 'src/modules/communication-module/communicat
 import { SecurityManageModule } from 'src/modules/security-module/security-manage.module';
 import { RequestManageModule } from 'src/modules/request-module/request-manage.module';
 import { UnitManageModule } from 'src/modules/unit-manage-module/unit-manage.module';
-import { DatabaseModule } from 'src/common/database/database.module';
-import { DatabaseService } from 'src/common/database/database.service';
+import { DatabaseModule } from 'src/database/database.module';
+import { DatabaseService } from 'src/database/database.service';
 
 @Module({
   imports: [

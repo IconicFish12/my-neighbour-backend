@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { CreateAnnouncementManageDto } from '../../../dtos/requests/create/create-announcement-manage.dto';
 import { UpdateAnnouncementManageDto } from '../../../dtos/requests/update/update-announcement-manage.dto';
-import { DatabaseService } from '../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 import { GeneralHelper } from '../../../common/helper/generalHelper';
 import { UploadsService } from 'src/common/helper/uploads/uploads.service';
 
@@ -113,8 +113,8 @@ export class AnnouncementManageService extends UploadsService {
       };
     } catch (error) {
       if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error as any).code === 'P2025'
       ) {
         throw new NotFoundException(
           `Pengumuman dengan id: ${id} tidak ditemukan`,
@@ -168,8 +168,8 @@ export class AnnouncementManageService extends UploadsService {
       });
     } catch (error) {
       if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error as any).code === 'P2025'
       ) {
         throw new NotFoundException(
           `Pengumuman dengan id: ${id} tidak ditemukan`,
@@ -198,8 +198,8 @@ export class AnnouncementManageService extends UploadsService {
       });
     } catch (error) {
       if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error as any).code === 'P2025'
       ) {
         throw new NotFoundException(
           `Pengumuman dengan id: ${id} tidak ditemukan`,

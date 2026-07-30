@@ -6,8 +6,8 @@ import {
 import * as bcrypt from 'bcrypt';
 import { CreateAppUserManageDto } from '../../../dtos/requests/create/create-app-user-manage.dto';
 import { UpdateAppUserManageDto } from '../../../dtos/requests/update/update-app-user-manage.dto';
-import { DatabaseService } from '../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class AppUserManageService {
@@ -184,8 +184,8 @@ export class AppUserManageService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Pengguna Aplikasi dengan id: ${id} tidak ditemukan`,
           );
@@ -221,8 +221,8 @@ export class AppUserManageService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Resident dengan id: ${id} tidak ditemukan`,
           );

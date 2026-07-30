@@ -1,9 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateForumTagManageDto = void 0;
-const mapped_types_1 = require("@nestjs/mapped-types");
-const create_forum_tag_manage_dto_1 = require("../create/create-forum-tag-manage.dto");
-class UpdateForumTagManageDto extends (0, mapped_types_1.PartialType)(create_forum_tag_manage_dto_1.CreateForumTagManageDto) {
-}
-exports.UpdateForumTagManageDto = UpdateForumTagManageDto;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UpdateForumTagManageDto", {
+    enumerable: true,
+    get: function() {
+        return UpdateForumTagManageDto;
+    }
+});
+const _mappedtypes = require("@nestjs/mapped-types");
+const _createforumtagmanagedto = require("../create/create-forum-tag-manage.dto");
+let UpdateForumTagManageDto = class UpdateForumTagManageDto extends (0, _mappedtypes.PartialType)(_createforumtagmanagedto.CreateForumTagManageDto) {
+};
+
 //# sourceMappingURL=update-forum-tag-manage.dto.js.map

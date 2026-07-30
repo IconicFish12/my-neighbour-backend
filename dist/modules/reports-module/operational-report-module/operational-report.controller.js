@@ -1,26 +1,40 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OperationalReportController = void 0;
-const common_1 = require("@nestjs/common");
-const operational_report_service_1 = require("./operational-report.service");
-const operational_report_filter_1 = require("../../../dtos/requests/operational-report-filter");
-let OperationalReportController = class OperationalReportController {
-    operationalReportService;
-    constructor(operationalReportService) {
-        this.operationalReportService = operationalReportService;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "OperationalReportController", {
+    enumerable: true,
+    get: function() {
+        return OperationalReportController;
     }
+});
+const _common = require("@nestjs/common");
+const _operationalreportservice = require("./operational-report.service");
+const _operationalreportfilter = require("../../../dtos/requests/operational-report-filter");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+function _ts_param(paramIndex, decorator) {
+    return function(target, key) {
+        decorator(target, key, paramIndex);
+    };
+}
+let OperationalReportController = class OperationalReportController {
     getComplaintStats(filter) {
         return this.operationalReportService.getComplaintStatistics(filter);
     }
@@ -30,30 +44,40 @@ let OperationalReportController = class OperationalReportController {
     getUnitResidentStats() {
         return this.operationalReportService.getUnitAndResidentStatistics();
     }
+    constructor(operationalReportService){
+        this.operationalReportService = operationalReportService;
+    }
 };
-exports.OperationalReportController = OperationalReportController;
-__decorate([
-    (0, common_1.Get)('complaints/stats'),
-    __param(0, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [operational_report_filter_1.OperationalReportFilterDto]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Get)('complaints/stats'),
+    _ts_param(0, (0, _common.Query)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _operationalreportfilter.OperationalReportFilterDto === "undefined" ? Object : _operationalreportfilter.OperationalReportFilterDto
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], OperationalReportController.prototype, "getComplaintStats", null);
-__decorate([
-    (0, common_1.Get)('security-reports/stats'),
-    __param(0, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [operational_report_filter_1.OperationalReportFilterDto]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Get)('security-reports/stats'),
+    _ts_param(0, (0, _common.Query)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _operationalreportfilter.OperationalReportFilterDto === "undefined" ? Object : _operationalreportfilter.OperationalReportFilterDto
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], OperationalReportController.prototype, "getSecurityReportStats", null);
-__decorate([
-    (0, common_1.Get)('units-residents/stats'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Get)('units-residents/stats'),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", []),
+    _ts_metadata("design:returntype", void 0)
 ], OperationalReportController.prototype, "getUnitResidentStats", null);
-exports.OperationalReportController = OperationalReportController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [operational_report_service_1.OperationalReportService])
+OperationalReportController = _ts_decorate([
+    (0, _common.Controller)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _operationalreportservice.OperationalReportService === "undefined" ? Object : _operationalreportservice.OperationalReportService
+    ])
 ], OperationalReportController);
+
 //# sourceMappingURL=operational-report.controller.js.map

@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { BackendApiModule } from './modules/backend-api.module';
 import { AuthModule } from './common/security/auth/auth.module';
 import { MailerManageModule } from './common/helper/mail/mailer-manage.module';
-import { DatabaseModule } from './common/database/database.module';
+import { DatabaseModule } from './database/database.module';
 import { FinancialModule } from './modules/financial-module/financial.module';
 import { CommunicationModule } from './modules/communication-module/communication.module';
 import { ContactManageModule } from './modules/contact-module/contact-manage.module';

@@ -1,10 +1,14 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignInRespones = void 0;
-class SignInRespones {
-    user;
-    resident;
-    tokens;
-}
-exports.SignInRespones = SignInRespones;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "SignInRespones", {
+    enumerable: true,
+    get: function() {
+        return SignInRespones;
+    }
+});
+let SignInRespones = class SignInRespones {
+};
+
 //# sourceMappingURL=sign-in-respones.js.map

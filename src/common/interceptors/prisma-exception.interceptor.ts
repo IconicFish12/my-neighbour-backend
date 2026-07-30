@@ -8,31 +8,26 @@ import {
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import {
-  PrismaClientKnownRequestError,
-  PrismaClientUnknownRequestError,
-  PrismaClientValidationError,
-  PrismaClientInitializationError,
-} from '@prisma/client/runtime/library';
+import { Prisma } from '../../database/generated/prisma/client.ts';
 
 @Injectable()
 export class PrismaExceptionInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {
-        if (error instanceof PrismaClientKnownRequestError) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
           return throwError(() => this.handlePrismaKnownError(error));
         }
 
-        if (error instanceof PrismaClientValidationError) {
+        if (error instanceof Prisma.PrismaClientValidationError) {
           return throwError(() => this.handlePrismaValidationError(error));
         }
 
-        if (error instanceof PrismaClientUnknownRequestError) {
+        if (error instanceof Prisma.PrismaClientUnknownRequestError) {
           return throwError(() => this.handlePrismaUnknownError(error));
         }
 
-        if (error instanceof PrismaClientInitializationError) {
+        if (error instanceof Prisma.PrismaClientInitializationError) {
           return throwError(() => this.handlePrismaInitError(error));
         }
 
@@ -42,7 +37,7 @@ export class PrismaExceptionInterceptor implements NestInterceptor {
   }
 
   private handlePrismaKnownError(
-    error: PrismaClientKnownRequestError,
+    error: Prisma.PrismaClientKnownRequestError,
   ): HttpException {
     const { code, meta } = error;
 
@@ -194,7 +189,7 @@ export class PrismaExceptionInterceptor implements NestInterceptor {
   }
 
   private handlePrismaValidationError(
-    _error: PrismaClientValidationError,
+    _error: Prisma.PrismaClientValidationError,
   ): HttpException {
     return new HttpException(
       'Invalid query parameters or data validation failed',
@@ -203,7 +198,7 @@ export class PrismaExceptionInterceptor implements NestInterceptor {
   }
 
   private handlePrismaUnknownError(
-    _error: PrismaClientUnknownRequestError,
+    _error: Prisma.PrismaClientUnknownRequestError,
   ): HttpException {
     return new HttpException(
       'An unknown database error occurred',
@@ -212,7 +207,7 @@ export class PrismaExceptionInterceptor implements NestInterceptor {
   }
 
   private handlePrismaInitError(
-    _error: PrismaClientInitializationError,
+    _error: Prisma.PrismaClientInitializationError,
   ): HttpException {
     return new HttpException(
       'Database connection failed',

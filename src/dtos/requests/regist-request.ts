@@ -17,7 +17,7 @@ import {
   IsArray,
   IsStrongPassword,
 } from 'class-validator';
-import { Gender, ResidentStatus } from '../../common/database/generated/prisma';
+import { Gender, ResidentStatus } from '../../database/generated/prisma/client.ts';
 import { IsUnique } from '../../common/pipes/validators/is-unique-validators';
 
 export enum RegistrationMethod {

@@ -11,7 +11,7 @@ import {
   RegistrationEmailData,
   WelcomeEmailData,
 } from './mail-interface';
-import { RegistrationMethod } from '../../../common/database/generated/prisma';
+import { RegistrationMethod } from '../../../database/generated/prisma/client.ts';
 
 export class SendVerificationEmailDto {
   fullName: string;

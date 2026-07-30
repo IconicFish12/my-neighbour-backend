@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { CreateForumCommentManageDto } from '../../../dtos/requests/create/create-forum-comment-manage.dto';
 import { UpdateForumCommentManageDto } from '../../../dtos/requests/update/update-forum-comment-manage.dto';
-import { DatabaseService } from '../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class ForumCommentManageService {
@@ -114,8 +114,8 @@ export class ForumCommentManageService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Comment post  dengan id: ${id} tidak ditemukan`,
           );
@@ -151,8 +151,8 @@ export class ForumCommentManageService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Comment post  dengan id: ${id} tidak ditemukan`,
           );

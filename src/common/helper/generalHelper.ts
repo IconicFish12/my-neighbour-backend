@@ -32,7 +32,7 @@ export class GeneralHelper {
   public static getFolderExtension(mimetype: string): string {
     const mime = mimetype.toLowerCase();
     if (mime in this.FileDictionary) {
-      return this.FileDictionary[mime];
+      return this.FileDictionary[mime] || 'others';
     }
     return 'others';
   }

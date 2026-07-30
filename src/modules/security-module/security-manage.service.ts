@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { CreateSecurityManageDto } from '../../dtos/requests/create/create-security-manage.dto';
 import { UpdateSecurityManageDto } from '../../dtos/requests/update/update-security-manage.dto';
-import { DatabaseService } from '../../common/database/database.service';
-import { PrismaClientKnownRequestError } from 'src/common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class SecurityManageService {
@@ -119,8 +119,8 @@ export class SecurityManageService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Laporan Keamanan dengan id: ${id} tidak ditemukan`,
           );
@@ -146,8 +146,8 @@ export class SecurityManageService {
         );
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Laporan Keamanan dengan id: ${id} tidak ditemukan`,
           );

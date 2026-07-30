@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ContactManageService } from './contact-manage.service';
 import { ContactManageController } from './contact-manage.controller';
-import { DatabaseModule } from 'src/common/database/database.module';
-import { DatabaseService } from 'src/common/database/database.service';
+import { DatabaseModule } from 'src/database/database.module';
+import { DatabaseService } from 'src/database/database.service';
 
 @Module({
   imports: [DatabaseModule],

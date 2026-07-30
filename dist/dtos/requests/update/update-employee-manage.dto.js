@@ -1,9 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateEmployeeManageDto = void 0;
-const mapped_types_1 = require("@nestjs/mapped-types");
-const create_employee_manage_dto_1 = require("../create/create-employee-manage.dto");
-class UpdateEmployeeManageDto extends (0, mapped_types_1.PartialType)(create_employee_manage_dto_1.CreateEmployeeManageDto) {
-}
-exports.UpdateEmployeeManageDto = UpdateEmployeeManageDto;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UpdateEmployeeManageDto", {
+    enumerable: true,
+    get: function() {
+        return UpdateEmployeeManageDto;
+    }
+});
+const _mappedtypes = require("@nestjs/mapped-types");
+const _createemployeemanagedto = require("../create/create-employee-manage.dto");
+let UpdateEmployeeManageDto = class UpdateEmployeeManageDto extends (0, _mappedtypes.PartialType)(_createemployeemanagedto.CreateEmployeeManageDto) {
+};
+
 //# sourceMappingURL=update-employee-manage.dto.js.map

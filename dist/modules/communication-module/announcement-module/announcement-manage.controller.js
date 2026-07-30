@@ -1,28 +1,42 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnnouncementManageController = void 0;
-const common_1 = require("@nestjs/common");
-const announcement_manage_service_1 = require("./announcement-manage.service");
-const create_announcement_manage_dto_1 = require("../../../dtos/requests/create/create-announcement-manage.dto");
-const update_announcement_manage_dto_1 = require("../../../dtos/requests/update/update-announcement-manage.dto");
-const platform_express_1 = require("@nestjs/platform-express");
-let AnnouncementManageController = class AnnouncementManageController {
-    announcementManageService;
-    constructor(announcementManageService) {
-        this.announcementManageService = announcementManageService;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "AnnouncementManageController", {
+    enumerable: true,
+    get: function() {
+        return AnnouncementManageController;
     }
+});
+const _common = require("@nestjs/common");
+const _announcementmanageservice = require("./announcement-manage.service");
+const _createannouncementmanagedto = require("../../../dtos/requests/create/create-announcement-manage.dto");
+const _updateannouncementmanagedto = require("../../../dtos/requests/update/update-announcement-manage.dto");
+const _platformexpress = require("@nestjs/platform-express");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+function _ts_param(paramIndex, decorator) {
+    return function(target, key) {
+        decorator(target, key, paramIndex);
+    };
+}
+let AnnouncementManageController = class AnnouncementManageController {
     create(createAnnouncementManageDto, files) {
         return this.announcementManageService.create(createAnnouncementManageDto, files);
     }
@@ -38,49 +52,66 @@ let AnnouncementManageController = class AnnouncementManageController {
     remove(id) {
         return this.announcementManageService.remove(id);
     }
+    constructor(announcementManageService){
+        this.announcementManageService = announcementManageService;
+    }
 };
-exports.AnnouncementManageController = AnnouncementManageController;
-__decorate([
-    (0, common_1.Post)(),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('attachments', 5)),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.UploadedFiles)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_announcement_manage_dto_1.CreateAnnouncementManageDto, Array]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Post)(),
+    (0, _common.UseInterceptors)((0, _platformexpress.FilesInterceptor)('attachments', 5)),
+    _ts_param(0, (0, _common.Body)()),
+    _ts_param(1, (0, _common.UploadedFiles)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _createannouncementmanagedto.CreateAnnouncementManageDto === "undefined" ? Object : _createannouncementmanagedto.CreateAnnouncementManageDto,
+        Array
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], AnnouncementManageController.prototype, "create", null);
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Get)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", []),
+    _ts_metadata("design:returntype", void 0)
 ], AnnouncementManageController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Get)(':id'),
+    _ts_param(0, (0, _common.Param)('id')),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        String
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], AnnouncementManageController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('attachments', 5)),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFiles)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_announcement_manage_dto_1.UpdateAnnouncementManageDto, Array]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Patch)(':id'),
+    (0, _common.UseInterceptors)((0, _platformexpress.FilesInterceptor)('attachments', 5)),
+    _ts_param(0, (0, _common.Param)('id')),
+    _ts_param(1, (0, _common.Body)()),
+    _ts_param(2, (0, _common.UploadedFiles)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        String,
+        typeof _updateannouncementmanagedto.UpdateAnnouncementManageDto === "undefined" ? Object : _updateannouncementmanagedto.UpdateAnnouncementManageDto,
+        Array
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], AnnouncementManageController.prototype, "update", null);
-__decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Delete)(':id'),
+    _ts_param(0, (0, _common.Param)('id')),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        String
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], AnnouncementManageController.prototype, "remove", null);
-exports.AnnouncementManageController = AnnouncementManageController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [announcement_manage_service_1.AnnouncementManageService])
+AnnouncementManageController = _ts_decorate([
+    (0, _common.Controller)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _announcementmanageservice.AnnouncementManageService === "undefined" ? Object : _announcementmanageservice.AnnouncementManageService
+    ])
 ], AnnouncementManageController);
+
 //# sourceMappingURL=announcement-manage.controller.js.map

@@ -1,1 +1,1 @@
-{"version":3,"file":"create-billing-manage.dto.js","sourceRoot":"","sources":["../../../../src/dtos/requests/create/create-billing-manage.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,sBAAsB;CAAG;AAAtC,wDAAsC"}
+{"version":3,"sources":["../../../../src/dtos/requests/create/create-billing-manage.dto.ts"],"sourcesContent":["export class CreateBillingManageDto {}\n"],"names":["CreateBillingManageDto"],"mappings":";;;;+BAAaA;;;eAAAA;;;AAAN,IAAA,AAAMA,yBAAN,MAAMA;AAAwB"}

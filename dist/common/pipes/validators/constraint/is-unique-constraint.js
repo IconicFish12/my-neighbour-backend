@@ -1,23 +1,37 @@
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsUniqueConstraint = void 0;
-const class_validator_1 = require("class-validator");
-const common_1 = require("@nestjs/common");
-const prisma_1 = require("../../../database/generated/prisma");
-let IsUniqueConstraint = class IsUniqueConstraint {
-    prismaClient;
-    constructor() {
-        this.prismaClient = new prisma_1.PrismaClient();
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */ /* eslint-disable @typescript-eslint/no-unsafe-assignment */ "use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "IsUniqueConstraint", {
+    enumerable: true,
+    get: function() {
+        return IsUniqueConstraint;
     }
+});
+require("dotenv/config");
+const _classvalidator = require("class-validator");
+const _common = require("@nestjs/common");
+const _clientts = require("../../../../database/generated/prisma/client.ts");
+const _adapterpg = require("@prisma/adapter-pg");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+let IsUniqueConstraint = class IsUniqueConstraint {
     async validate(value, args) {
         if (!this.prismaClient) {
             return false;
@@ -32,23 +46,20 @@ let IsUniqueConstraint = class IsUniqueConstraint {
             return false;
         }
         const whereCondition = {
-            [field]: value,
+            [field]: value
         };
-        if (excludeIdField &&
-            args.object &&
-            args.object[excludeIdField]) {
+        if (excludeIdField && args.object && args.object[excludeIdField]) {
             const excludeId = args.object[excludeIdField];
             whereCondition.NOT = {
-                id: excludeId,
+                id: excludeId
             };
         }
         try {
             const existingRecord = await modelAccessor.findFirst({
-                where: whereCondition,
+                where: whereCondition
             });
             return !existingRecord;
-        }
-        catch (error) {
+        } catch (error) {
             console.error(`IsUniqueConstraint: Database error checking uniqueness for ${model}.${field}:`, error);
             return false;
         }
@@ -57,11 +68,26 @@ let IsUniqueConstraint = class IsUniqueConstraint {
         const [, field] = args.constraints;
         return `Nilai '${args.value}' untuk field '${field}' sudah ada.`;
     }
+    constructor(){
+        const connectionString = process.env.DATABASE_URL_SUPABASE || process.env.DATABASE_URL || '';
+        const adapter = new _adapterpg.PrismaPg({
+            connectionString
+        });
+        this.prismaClient = new _clientts.PrismaClient({
+            adapter
+        });
+    }
 };
-exports.IsUniqueConstraint = IsUniqueConstraint;
-exports.IsUniqueConstraint = IsUniqueConstraint = __decorate([
-    (0, class_validator_1.ValidatorConstraint)({ name: 'isUnique', async: true }),
-    (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
-    __metadata("design:paramtypes", [])
+IsUniqueConstraint = _ts_decorate([
+    (0, _classvalidator.ValidatorConstraint)({
+        name: 'isUnique',
+        async: true
+    }),
+    (0, _common.Injectable)({
+        scope: _common.Scope.REQUEST
+    }),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [])
 ], IsUniqueConstraint);
+
 //# sourceMappingURL=is-unique-constraint.js.map

@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/common/database/database.service';
-import { PaymentStatus } from 'src/common/database/generated/prisma';
+import { DatabaseService } from 'src/database/database.service';
+import { PaymentStatus } from 'src/database/generated/prisma/client.ts';
 import { PaymentsReportFilterDto } from 'src/dtos/requests/payments-report-filter-dto';
 
 @Injectable()

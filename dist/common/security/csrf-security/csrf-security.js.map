@@ -1,1 +1,1 @@
-{"version":3,"file":"csrf-security.js","sourceRoot":"","sources":["../../../../src/common/security/csrf-security/csrf-security.ts"],"names":[],"mappings":";;;AAAA,MAAa,YAAY;CAAG;AAA5B,oCAA4B"}
+{"version":3,"sources":["../../../../src/common/security/csrf-security/csrf-security.ts"],"sourcesContent":["export class CsrfSecurity {}\n"],"names":["CsrfSecurity"],"mappings":";;;;+BAAaA;;;eAAAA;;;AAAN,IAAA,AAAMA,eAAN,MAAMA;AAAc"}

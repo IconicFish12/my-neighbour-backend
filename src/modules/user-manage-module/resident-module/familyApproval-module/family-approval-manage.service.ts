@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { CreateFamilyApprovalManageDto } from '../../../../dtos/requests/create/create-family-approval-manage.dto';
 import { UpdateFamilyApprovalManageDto } from '../../../../dtos/requests/update/update-family-approval-manage.dto';
-import { DatabaseService } from '../../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../../common/database/generated/prisma/runtime/library';
-import { ApprovalStatus } from '../../../../common/database/generated/prisma';
+import { DatabaseService } from '../../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
+import { ApprovalStatus } from '../../../../database/generated/prisma/client.ts';
 
 @Injectable()
 export class FamilyApprovalManageService {
@@ -39,8 +39,8 @@ export class FamilyApprovalManageService {
       });
     } catch (error) {
       console.error((error as Error).message);
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2003') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2003') {
           throw new BadRequestException(
             'ID anggota keluarga atau ID kepala rumah tangga tidak valid.',
           );
@@ -113,7 +113,7 @@ export class FamilyApprovalManageService {
       });
     } catch (error) {
       console.error((error as Error).message);
-      if ((error as PrismaClientKnownRequestError).code === 'P2025') {
+      if ((error as Prisma.PrismaClientKnownRequestError).code === 'P2025') {
         throw new NotFoundException(
           `Data Permintaan persetujuan keluarga dengan ID ${id} tidak ditemukan.`,
         );
@@ -149,7 +149,7 @@ export class FamilyApprovalManageService {
         },
       });
     } catch (error) {
-      if ((error as PrismaClientKnownRequestError).code === 'P2025') {
+      if ((error as Prisma.PrismaClientKnownRequestError).code === 'P2025') {
         throw new NotFoundException(
           `Data Permintaan persetujuan keluarga dengan ID ${id} tidak ditemukan.`,
         );
@@ -176,7 +176,7 @@ export class FamilyApprovalManageService {
         where: { id: id },
       });
     } catch (error) {
-      if ((error as PrismaClientKnownRequestError).code === 'P2025') {
+      if ((error as Prisma.PrismaClientKnownRequestError).code === 'P2025') {
         throw new NotFoundException(
           `Data Permintaan persetujuan keluarga dengan ID ${id} tidak ditemukan.`,
         );

@@ -2,7 +2,7 @@ import { IsOptional, IsDateString, IsEnum } from 'class-validator';
 import {
   PaymentStatus,
   PaymentType,
-} from '../../common/database/generated/prisma';
+} from '../../database/generated/prisma/client.ts';
 
 export class PaymentsReportFilterDto {
   @IsOptional()

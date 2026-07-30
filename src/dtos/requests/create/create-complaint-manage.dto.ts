@@ -11,7 +11,7 @@ import {
   ComplaintStatus,
   MaintenanceCategory,
   MaintenanceStatus,
-} from '../../../common/database/generated/prisma';
+} from '../../../database/generated/prisma/client.ts';
 import { Type } from 'class-transformer';
 
 export class CreateComplaintManageDto {

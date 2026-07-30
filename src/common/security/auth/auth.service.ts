@@ -7,7 +7,7 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { DatabaseService } from '../../../common/database/database.service';
+import { DatabaseService } from '../../../database/database.service';
 import {
   RegistrationMethod,
   RegistRequest,
@@ -19,7 +19,7 @@ import {
   ResidentStatus,
   UnitStatus,
   UserRole,
-} from '../../../common/database/generated/prisma';
+} from '../../../database/generated/prisma/client.ts';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';

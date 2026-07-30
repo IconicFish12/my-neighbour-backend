@@ -1,9 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateForumCommentManageDto = void 0;
-const mapped_types_1 = require("@nestjs/mapped-types");
-const create_forum_comment_manage_dto_1 = require("../create/create-forum-comment-manage.dto");
-class UpdateForumCommentManageDto extends (0, mapped_types_1.PartialType)(create_forum_comment_manage_dto_1.CreateForumCommentManageDto) {
-}
-exports.UpdateForumCommentManageDto = UpdateForumCommentManageDto;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UpdateForumCommentManageDto", {
+    enumerable: true,
+    get: function() {
+        return UpdateForumCommentManageDto;
+    }
+});
+const _mappedtypes = require("@nestjs/mapped-types");
+const _createforumcommentmanagedto = require("../create/create-forum-comment-manage.dto");
+let UpdateForumCommentManageDto = class UpdateForumCommentManageDto extends (0, _mappedtypes.PartialType)(_createforumcommentmanagedto.CreateForumCommentManageDto) {
+};
+
 //# sourceMappingURL=update-forum-comment-manage.dto.js.map

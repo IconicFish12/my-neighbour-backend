@@ -4,9 +4,9 @@ import { PaymentsManageController } from './payments-manage.controller';
 import { BillingManageModule } from '../billing-module/billing-manage.module';
 import { ResidentManageModule } from '../../user-manage-module/resident-module/resident-manage.module';
 import { UnitManageModule } from '../../unit-manage-module/unit-manage.module';
-import { DatabaseService } from 'src/common/database/database.service';
+import { DatabaseService } from 'src/database/database.service';
 import { GeneralHelper } from 'src/common/helper/generalHelper';
-import { DatabaseModule } from 'src/common/database/database.module';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [

@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import * as path from 'path';
 import { MailerManageService } from './mailer-manage.service';
 import { MailerManageController } from './mailer-manage.controller';
-import { DatabaseModule } from 'src/common/database/database.module';
+import { DatabaseModule } from 'src/database/database.module';
 import { EmployeeManageModule } from 'src/modules/user-manage-module/employee-module/employee-manage.module';
 import { ResidentManageModule } from 'src/modules/user-manage-module/resident-module/resident-manage.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+// @ts-ignore
+import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter.js';
 import { ConfigService } from '@nestjs/config';
 
 @Module({

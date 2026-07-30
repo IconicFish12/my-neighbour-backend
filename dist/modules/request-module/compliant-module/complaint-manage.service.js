@@ -1,23 +1,35 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ComplaintManageService = void 0;
-const common_1 = require("@nestjs/common");
-const database_service_1 = require("../../../common/database/database.service");
-const library_1 = require("../../../common/database/generated/prisma/runtime/library");
-let ComplaintManageService = class ComplaintManageService {
-    prisma;
-    constructor(prisma) {
-        this.prisma = prisma;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "ComplaintManageService", {
+    enumerable: true,
+    get: function() {
+        return ComplaintManageService;
     }
+});
+const _common = require("@nestjs/common");
+const _databaseservice = require("../../../database/database.service");
+const _clientts = require("../../../database/generated/prisma/client.ts");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+let ComplaintManageService = class ComplaintManageService {
     async create(createRequest) {
         try {
             return await this.prisma.complaints.create({
@@ -30,35 +42,37 @@ let ComplaintManageService = class ComplaintManageService {
                     images: createRequest.images ?? [],
                     resolutionDetails: createRequest.resolutionDetails ?? null,
                     resolvedAt: createRequest.resolvedAt ?? null,
-                    unitId: createRequest.unitId ?? null,
-                },
+                    unitId: createRequest.unitId ?? null
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Keluhan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Membuat Data Keluhan');
         }
     }
     async findAll() {
         try {
             return await this.prisma.complaints.findMany({
-                orderBy: { submittedAt: 'asc' },
+                orderBy: {
+                    submittedAt: 'asc'
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Keluhan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Keluhan');
         }
     }
     async findOne(id) {
         try {
             return await this.prisma.complaints.findUniqueOrThrow({
-                where: { id: id },
+                where: {
+                    id: id
+                },
                 include: {
                     employee: {
                         select: {
                             employeeNumberId: true,
-                            employeePosition: true,
+                            employeePosition: true
                         },
                         include: {
                             user: {
@@ -67,10 +81,10 @@ let ComplaintManageService = class ComplaintManageService {
                                     fullName: true,
                                     firstName: true,
                                     lastName: true,
-                                    username: true,
-                                },
-                            },
-                        },
+                                    username: true
+                                }
+                            }
+                        }
                     },
                     resident: {
                         include: {
@@ -80,37 +94,40 @@ let ComplaintManageService = class ComplaintManageService {
                                     fullName: true,
                                     firstName: true,
                                     lastName: true,
-                                    username: true,
-                                },
+                                    username: true
+                                }
                             },
                             unit: {
                                 select: {
                                     buildingName: true,
                                     location: true,
                                     unitNumber: true,
-                                    status: true,
-                                },
-                            },
-                        },
-                    },
-                },
+                                    status: true
+                                }
+                            }
+                        }
+                    }
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Keluhan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Data Keluhan');
         }
     }
     async update(id, updateRequest) {
         try {
             const existData = await this.prisma.complaints.findUniqueOrThrow({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
             if (!existData) {
-                throw new common_1.NotFoundException(`Data Keluhan dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Data Keluhan dengan id: ${id} tidak ditemukan`);
             }
             return await this.prisma.complaints.update({
-                where: { id: id },
+                where: {
+                    id: id
+                },
                 data: {
                     title: updateRequest.title ?? existData.title,
                     description: updateRequest.description ?? existData.description,
@@ -121,52 +138,60 @@ let ComplaintManageService = class ComplaintManageService {
                     resolutionDetails: updateRequest.resolutionDetails ?? existData.resolutionDetails,
                     resolvedAt: updateRequest.resolvedAt ?? existData.resolvedAt,
                     unitId: updateRequest.unitId ?? existData.unitId,
-                    updatedAt: new Date(),
-                },
+                    updatedAt: new Date()
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             if (error.name === 'NotFoundError') {
-                throw new common_1.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
             }
-            if (error instanceof library_1.PrismaClientKnownRequestError) {
+            if (error instanceof _clientts.Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new common_1.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
+                    throw new _common.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
                 }
             }
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Keluhan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Keluhan');
         }
     }
     async remove(id) {
         try {
             const existData = await this.prisma.complaints.findUniqueOrThrow({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
             if (!existData) {
-                throw new common_1.NotFoundException(`Data Keluhan dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Data Keluhan dengan id: ${id} tidak ditemukan`);
             }
             return await this.prisma.complaints.delete({
-                where: { id: id },
+                where: {
+                    id: id
+                }
             });
-        }
-        catch (error) {
+        } catch (error) {
             if (error.name === 'NotFoundError') {
-                throw new common_1.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
+                throw new _common.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
             }
-            if (error instanceof library_1.PrismaClientKnownRequestError) {
+            if (error instanceof _clientts.Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new common_1.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
+                    throw new _common.NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
                 }
             }
             console.error(error.message);
-            throw new common_1.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Keluhan');
+            throw new _common.InternalServerErrorException('Terjadi Kesalahan Saat Mendapatkan Keluhan');
         }
     }
+    constructor(prisma){
+        this.prisma = prisma;
+    }
 };
-exports.ComplaintManageService = ComplaintManageService;
-exports.ComplaintManageService = ComplaintManageService = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [database_service_1.DatabaseService])
+ComplaintManageService = _ts_decorate([
+    (0, _common.Injectable)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _databaseservice.DatabaseService === "undefined" ? Object : _databaseservice.DatabaseService
+    ])
 ], ComplaintManageService);
+
 //# sourceMappingURL=complaint-manage.service.js.map

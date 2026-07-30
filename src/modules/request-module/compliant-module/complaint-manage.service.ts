@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { CreateComplaintManageDto } from '../../../dtos/requests/create/create-complaint-manage.dto';
 import { UpdateComplaintManageDto } from '../../../dtos/requests/update/update-complaint-manage.dto';
-import { DatabaseService } from '../../../common/database/database.service';
-import { PrismaClientKnownRequestError } from '../../../common/database/generated/prisma/runtime/library';
+import { DatabaseService } from '../../../database/database.service';
+import { Prisma } from 'src/database/generated/prisma/client.ts';
 
 @Injectable()
 export class ComplaintManageService {
@@ -133,8 +133,8 @@ export class ComplaintManageService {
         throw new NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Keluhan dengan id: ${id} tidak ditemukan`,
           );
@@ -168,8 +168,8 @@ export class ComplaintManageService {
         throw new NotFoundException(`Keluhan dengan id: ${id} tidak ditemukan`);
       }
 
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if ((error as any).code === 'P2025') {
           throw new NotFoundException(
             `Keluhan dengan id: ${id} tidak ditemukan`,
           );

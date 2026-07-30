@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import 'dotenv/config';
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
@@ -7,15 +8,19 @@ import {
 } from 'class-validator';
 import { Injectable, Scope } from '@nestjs/common';
 import { SchemaModels } from '../schema-models';
-import { PrismaClient as GeneratedPrismaClient } from '../../../database/generated/prisma';
+import { PrismaClient as GeneratedPrismaClient } from '../../../../database/generated/prisma/client.ts';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 @ValidatorConstraint({ name: 'isUnique', async: true })
-@Injectable({ scope: Scope.REQUEST }) // Tetap di REQUEST scope
+@Injectable({ scope: Scope.REQUEST })
 export class IsUniqueConstraint implements ValidatorConstraintInterface {
   private prismaClient: GeneratedPrismaClient;
 
   constructor() {
-    this.prismaClient = new GeneratedPrismaClient();
+    const connectionString =
+      process.env.DATABASE_URL_SUPABASE || process.env.DATABASE_URL || '';
+    const adapter = new PrismaPg({ connectionString });
+    this.prismaClient = new GeneratedPrismaClient({ adapter });
   }
 
   async validate(value: any, args: ValidationArguments): Promise<boolean> {

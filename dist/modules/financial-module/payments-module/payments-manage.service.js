@@ -1,13 +1,27 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "PaymentsManageService", {
+    enumerable: true,
+    get: function() {
+        return PaymentsManageService;
+    }
+});
+const _common = require("@nestjs/common");
+function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PaymentsManageService = void 0;
-const common_1 = require("@nestjs/common");
+}
 let PaymentsManageService = class PaymentsManageService {
     create(createRequest) {
         return 'This action adds a new paymentsManage';
@@ -25,8 +39,8 @@ let PaymentsManageService = class PaymentsManageService {
         return `This action removes a #${id} paymentsManage`;
     }
 };
-exports.PaymentsManageService = PaymentsManageService;
-exports.PaymentsManageService = PaymentsManageService = __decorate([
-    (0, common_1.Injectable)()
+PaymentsManageService = _ts_decorate([
+    (0, _common.Injectable)()
 ], PaymentsManageService);
+
 //# sourceMappingURL=payments-manage.service.js.map

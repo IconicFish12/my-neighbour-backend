@@ -24,7 +24,14 @@
         "include": "/common/uploads",
         "outDir": "dist/"
       }
-    ]
+    ],
+    "builder": {
+      "type": "swc",
+      "options": {
+        "swcrcPath": "./.swcrc"
+      },
+      "typeCheck": false
+    }
   },
   "projects": {
     "main": {

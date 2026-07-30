@@ -1,7 +1,14 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersResponesDto = void 0;
-class UsersResponesDto {
-}
-exports.UsersResponesDto = UsersResponesDto;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UsersResponesDto", {
+    enumerable: true,
+    get: function() {
+        return UsersResponesDto;
+    }
+});
+let UsersResponesDto = class UsersResponesDto {
+};
+
 //# sourceMappingURL=users-respones-dto.js.map

@@ -1,125 +1,120 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MailerManageController = exports.SendDocumentReviewDto = exports.SendApprovalNotificationDto = exports.SendVerificationEmailDto = void 0;
-const common_1 = require("@nestjs/common");
-const mailer_manage_service_1 = require("./mailer-manage.service");
-const prisma_1 = require("../../../common/database/generated/prisma");
-class SendVerificationEmailDto {
-    fullName;
-    email;
-    verificationCode;
-    registrationType;
-    unitNumber;
-    propertyName;
-    isAdminDriven;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: Object.getOwnPropertyDescriptor(all, name).get
+    });
 }
-exports.SendVerificationEmailDto = SendVerificationEmailDto;
-class SendApprovalNotificationDto {
-    headOfHouseholdName;
-    headOfHouseholdEmail;
-    familyMemberName;
-    familyMemberEmail;
-    uniqueCode;
-    actionUrl;
-}
-exports.SendApprovalNotificationDto = SendApprovalNotificationDto;
-class SendDocumentReviewDto {
-    applicantName;
-    applicantEmail;
-    adminName;
-    adminEmail;
-    documentType;
-    submissionDate;
-    reviewUrl;
-}
-exports.SendDocumentReviewDto = SendDocumentReviewDto;
-let MailerManageController = class MailerManageController {
-    mailerManageService;
-    constructor(mailerManageService) {
-        this.mailerManageService = mailerManageService;
+_export(exports, {
+    get MailerManageController () {
+        return MailerManageController;
+    },
+    get SendApprovalNotificationDto () {
+        return SendApprovalNotificationDto;
+    },
+    get SendDocumentReviewDto () {
+        return SendDocumentReviewDto;
+    },
+    get SendVerificationEmailDto () {
+        return SendVerificationEmailDto;
     }
+});
+const _common = require("@nestjs/common");
+const _mailermanageservice = require("./mailer-manage.service");
+const _clientts = require("../../../database/generated/prisma/client.ts");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+function _ts_param(paramIndex, decorator) {
+    return function(target, key) {
+        decorator(target, key, paramIndex);
+    };
+}
+let SendVerificationEmailDto = class SendVerificationEmailDto {
+};
+let SendApprovalNotificationDto = class SendApprovalNotificationDto {
+};
+let SendDocumentReviewDto = class SendDocumentReviewDto {
+};
+let MailerManageController = class MailerManageController {
     async sendVerificationEmail(dto) {
         try {
             const verificationCode = this.mailerManageService.generateVerificationCode();
             const emailData = {
                 ...dto,
-                verificationCode,
+                verificationCode
             };
             let result;
-            if (dto.registrationType === prisma_1.RegistrationMethod.ADMIN_DRIVEN) {
+            if (dto.registrationType === _clientts.RegistrationMethod.ADMIN_DRIVEN) {
                 if (dto.isAdminDriven == true) {
-                    result =
-                        await this.mailerManageService.sendAdminDrivenHeadOfHouseholdEmail(emailData);
+                    result = await this.mailerManageService.sendAdminDrivenHeadOfHouseholdEmail(emailData);
+                } else {
+                    result = await this.mailerManageService.sendHeadOfHouseholdVerificationEmail(emailData);
                 }
-                else {
-                    result =
-                        await this.mailerManageService.sendHeadOfHouseholdVerificationEmail(emailData);
-                }
-            }
-            else {
+            } else {
                 if (dto.isAdminDriven == false) {
-                    result =
-                        await this.mailerManageService.sendAdminDrivenFamilyMemberEmail(emailData);
-                }
-                else {
-                    result =
-                        await this.mailerManageService.sendFamilyMemberVerificationEmail(emailData);
+                    result = await this.mailerManageService.sendAdminDrivenFamilyMemberEmail(emailData);
+                } else {
+                    result = await this.mailerManageService.sendFamilyMemberVerificationEmail(emailData);
                 }
             }
             if (!result) {
-                throw new common_1.HttpException('Gagal untuk mengirim email verifikasi', common_1.HttpStatus.BAD_REQUEST);
+                throw new _common.HttpException('Gagal untuk mengirim email verifikasi', _common.HttpStatus.BAD_REQUEST);
             }
             return {
                 message: 'Email verifikasi berhasil dikirim',
-                verificationCode,
+                verificationCode
             };
-        }
-        catch (error) {
-            throw new common_1.HttpException(error.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (error) {
+            throw new _common.HttpException(error.message, _common.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async sendApprovalNotification(dto) {
         try {
             const result = await this.mailerManageService.sendFamilyMemberApprovalNotification(dto);
             if (!result) {
-                throw new common_1.HttpException('Gagal mengirim pemberitahuan persetujuan', common_1.HttpStatus.BAD_REQUEST);
+                throw new _common.HttpException('Gagal mengirim pemberitahuan persetujuan', _common.HttpStatus.BAD_REQUEST);
             }
             return {
-                message: 'Pemberitahuan persetujuan berhasil dikirim',
+                message: 'Pemberitahuan persetujuan berhasil dikirim'
             };
-        }
-        catch (error) {
-            throw new common_1.HttpException(error.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (error) {
+            throw new _common.HttpException(error.message, _common.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async sendDocumentReview(dto) {
         try {
             const reviewData = {
                 ...dto,
-                submissionDate: new Date().toLocaleDateString('id-ID'),
+                submissionDate: new Date().toLocaleDateString('id-ID')
             };
             const result = await this.mailerManageService.sendDocumentVerificationRequestToAdmin(reviewData);
             if (!result) {
-                throw new common_1.HttpException('Failed to send document review request', common_1.HttpStatus.BAD_REQUEST);
+                throw new _common.HttpException('Failed to send document review request', _common.HttpStatus.BAD_REQUEST);
             }
             return {
-                message: 'Document review request sent successfully',
+                message: 'Document review request sent successfully'
             };
-        }
-        catch (error) {
-            throw new common_1.HttpException(error.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (error) {
+            throw new _common.HttpException(error.message, _common.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async sendWelcomeEmail(body) {
@@ -127,60 +122,70 @@ let MailerManageController = class MailerManageController {
             const uniqueCode = this.mailerManageService.generateUniqueCode();
             const welcomeData = {
                 ...body,
-                uniqueCode,
+                uniqueCode
             };
             let result;
             if (body.registrationType === 'head-of-household') {
-                result =
-                    await this.mailerManageService.sendHeadOfHouseholdWelcomeEmail(welcomeData);
-            }
-            else {
-                result =
-                    await this.mailerManageService.sendFamilyMemberWelcomeEmail(welcomeData);
+                result = await this.mailerManageService.sendHeadOfHouseholdWelcomeEmail(welcomeData);
+            } else {
+                result = await this.mailerManageService.sendFamilyMemberWelcomeEmail(welcomeData);
             }
             if (!result) {
-                throw new common_1.HttpException('Failed to send welcome email', common_1.HttpStatus.BAD_REQUEST);
+                throw new _common.HttpException('Failed to send welcome email', _common.HttpStatus.BAD_REQUEST);
             }
             return {
                 message: 'Welcome email sent successfully',
-                uniqueCode,
+                uniqueCode
             };
-        }
-        catch (error) {
-            throw new common_1.HttpException(error.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (error) {
+            throw new _common.HttpException(error.message, _common.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    constructor(mailerManageService){
+        this.mailerManageService = mailerManageService;
+    }
 };
-exports.MailerManageController = MailerManageController;
-__decorate([
-    (0, common_1.Post)('send-verification'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [SendVerificationEmailDto]),
-    __metadata("design:returntype", Promise)
+_ts_decorate([
+    (0, _common.Post)('send-verification'),
+    _ts_param(0, (0, _common.Body)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof SendVerificationEmailDto === "undefined" ? Object : SendVerificationEmailDto
+    ]),
+    _ts_metadata("design:returntype", Promise)
 ], MailerManageController.prototype, "sendVerificationEmail", null);
-__decorate([
-    (0, common_1.Post)('send-document-review'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [SendApprovalNotificationDto]),
-    __metadata("design:returntype", Promise)
+_ts_decorate([
+    (0, _common.Post)('send-document-review'),
+    _ts_param(0, (0, _common.Body)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof SendApprovalNotificationDto === "undefined" ? Object : SendApprovalNotificationDto
+    ]),
+    _ts_metadata("design:returntype", Promise)
 ], MailerManageController.prototype, "sendApprovalNotification", null);
-__decorate([
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [SendDocumentReviewDto]),
-    __metadata("design:returntype", Promise)
+_ts_decorate([
+    _ts_param(0, (0, _common.Body)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof SendDocumentReviewDto === "undefined" ? Object : SendDocumentReviewDto
+    ]),
+    _ts_metadata("design:returntype", Promise)
 ], MailerManageController.prototype, "sendDocumentReview", null);
-__decorate([
-    (0, common_1.Post)('send-welcome'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
+_ts_decorate([
+    (0, _common.Post)('send-welcome'),
+    _ts_param(0, (0, _common.Body)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        Object
+    ]),
+    _ts_metadata("design:returntype", Promise)
 ], MailerManageController.prototype, "sendWelcomeEmail", null);
-exports.MailerManageController = MailerManageController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [mailer_manage_service_1.MailerManageService])
+MailerManageController = _ts_decorate([
+    (0, _common.Controller)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _mailermanageservice.MailerManageService === "undefined" ? Object : _mailermanageservice.MailerManageService
+    ])
 ], MailerManageController);
+
 //# sourceMappingURL=mailer-manage.controller.js.map

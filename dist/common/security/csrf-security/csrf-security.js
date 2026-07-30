@@ -1,7 +1,14 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CsrfSecurity = void 0;
-class CsrfSecurity {
-}
-exports.CsrfSecurity = CsrfSecurity;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "CsrfSecurity", {
+    enumerable: true,
+    get: function() {
+        return CsrfSecurity;
+    }
+});
+let CsrfSecurity = class CsrfSecurity {
+};
+
 //# sourceMappingURL=csrf-security.js.map

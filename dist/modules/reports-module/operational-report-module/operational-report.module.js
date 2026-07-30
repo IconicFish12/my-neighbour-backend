@@ -1,39 +1,60 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "OperationalReportModule", {
+    enumerable: true,
+    get: function() {
+        return OperationalReportModule;
+    }
+});
+const _common = require("@nestjs/common");
+const _operationalreportservice = require("./operational-report.service");
+const _operationalreportcontroller = require("./operational-report.controller");
+const _usersmanagemodule = require("../../user-manage-module/users-manage.module");
+const _communicationmodule = require("../../communication-module/communication.module");
+const _securitymanagemodule = require("../../security-module/security-manage.module");
+const _requestmanagemodule = require("../../request-module/request-manage.module");
+const _unitmanagemodule = require("../../unit-manage-module/unit-manage.module");
+const _databasemodule = require("../../../database/database.module");
+const _databaseservice = require("../../../database/database.service");
+function _ts_decorate(decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OperationalReportModule = void 0;
-const common_1 = require("@nestjs/common");
-const operational_report_service_1 = require("./operational-report.service");
-const operational_report_controller_1 = require("./operational-report.controller");
-const users_manage_module_1 = require("../../user-manage-module/users-manage.module");
-const communication_module_1 = require("../../communication-module/communication.module");
-const security_manage_module_1 = require("../../security-module/security-manage.module");
-const request_manage_module_1 = require("../../request-module/request-manage.module");
-const unit_manage_module_1 = require("../../unit-manage-module/unit-manage.module");
-const database_module_1 = require("../../../common/database/database.module");
-const database_service_1 = require("../../../common/database/database.service");
+}
 let OperationalReportModule = class OperationalReportModule {
 };
-exports.OperationalReportModule = OperationalReportModule;
-exports.OperationalReportModule = OperationalReportModule = __decorate([
-    (0, common_1.Module)({
+OperationalReportModule = _ts_decorate([
+    (0, _common.Module)({
         imports: [
-            database_module_1.DatabaseModule,
-            users_manage_module_1.UsersManageModule,
-            communication_module_1.CommunicationModule,
-            unit_manage_module_1.UnitManageModule,
-            request_manage_module_1.RequestManageModule,
-            security_manage_module_1.SecurityManageModule,
-            security_manage_module_1.SecurityManageModule,
+            _databasemodule.DatabaseModule,
+            _usersmanagemodule.UsersManageModule,
+            _communicationmodule.CommunicationModule,
+            _unitmanagemodule.UnitManageModule,
+            _requestmanagemodule.RequestManageModule,
+            _securitymanagemodule.SecurityManageModule,
+            _securitymanagemodule.SecurityManageModule
         ],
-        controllers: [operational_report_controller_1.OperationalReportController],
-        providers: [operational_report_service_1.OperationalReportService, database_service_1.DatabaseService],
-        exports: [operational_report_service_1.OperationalReportService],
+        controllers: [
+            _operationalreportcontroller.OperationalReportController
+        ],
+        providers: [
+            _operationalreportservice.OperationalReportService,
+            _databaseservice.DatabaseService
+        ],
+        exports: [
+            _operationalreportservice.OperationalReportService
+        ]
     })
 ], OperationalReportModule);
+
 //# sourceMappingURL=operational-report.module.js.map

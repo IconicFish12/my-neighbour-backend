@@ -1,27 +1,41 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UnitManageController = void 0;
-const common_1 = require("@nestjs/common");
-const unit_manage_service_1 = require("./unit-manage.service");
-const create_unit_manage_dto_1 = require("../../dtos/requests/create/create-unit-manage.dto");
-const update_unit_manage_dto_1 = require("../../dtos/requests/update/update-unit-manage.dto");
-let UnitManageController = class UnitManageController {
-    unitManageService;
-    constructor(unitManageService) {
-        this.unitManageService = unitManageService;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "UnitManageController", {
+    enumerable: true,
+    get: function() {
+        return UnitManageController;
     }
+});
+const _common = require("@nestjs/common");
+const _unitmanageservice = require("./unit-manage.service");
+const _createunitmanagedto = require("../../dtos/requests/create/create-unit-manage.dto");
+const _updateunitmanagedto = require("../../dtos/requests/update/update-unit-manage.dto");
+function _ts_decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") {
+        r = Reflect.decorate(decorators, target, key, desc);
+    } else {
+        for(var i = decorators.length - 1; i >= 0; i--){
+            if (d = decorators[i]) {
+                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+            }
+        }
+    }
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+function _ts_metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") {
+        return Reflect.metadata(metadataKey, metadataValue);
+    }
+}
+function _ts_param(paramIndex, decorator) {
+    return function(target, key) {
+        decorator(target, key, paramIndex);
+    };
+}
+let UnitManageController = class UnitManageController {
     create(createUnitManageDto) {
         return this.unitManageService.create(createUnitManageDto);
     }
@@ -37,45 +51,60 @@ let UnitManageController = class UnitManageController {
     remove(id) {
         return this.unitManageService.remove(id);
     }
+    constructor(unitManageService){
+        this.unitManageService = unitManageService;
+    }
 };
-exports.UnitManageController = UnitManageController;
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_unit_manage_dto_1.CreateUnitManageDto]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Post)(),
+    _ts_param(0, (0, _common.Body)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _createunitmanagedto.CreateUnitManageDto === "undefined" ? Object : _createunitmanagedto.CreateUnitManageDto
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], UnitManageController.prototype, "create", null);
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Get)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", []),
+    _ts_metadata("design:returntype", void 0)
 ], UnitManageController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Get)(':id'),
+    _ts_param(0, (0, _common.Param)('id')),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        String
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], UnitManageController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_unit_manage_dto_1.UpdateUnitManageDto]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Patch)(':id'),
+    _ts_param(0, (0, _common.Param)('id')),
+    _ts_param(1, (0, _common.Body)()),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        String,
+        typeof _updateunitmanagedto.UpdateUnitManageDto === "undefined" ? Object : _updateunitmanagedto.UpdateUnitManageDto
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], UnitManageController.prototype, "update", null);
-__decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+_ts_decorate([
+    (0, _common.Delete)(':id'),
+    _ts_param(0, (0, _common.Param)('id')),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        String
+    ]),
+    _ts_metadata("design:returntype", void 0)
 ], UnitManageController.prototype, "remove", null);
-exports.UnitManageController = UnitManageController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [unit_manage_service_1.UnitManageService])
+UnitManageController = _ts_decorate([
+    (0, _common.Controller)(),
+    _ts_metadata("design:type", Function),
+    _ts_metadata("design:paramtypes", [
+        typeof _unitmanageservice.UnitManageService === "undefined" ? Object : _unitmanageservice.UnitManageService
+    ])
 ], UnitManageController);
+
 //# sourceMappingURL=unit-manage.controller.js.map

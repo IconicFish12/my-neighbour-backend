@@ -1,4 +1,4 @@
-import { CostumeValidationPipe } from './costume-validation.pipe';
+import { CostumeValidationPipe } from '../costume-validation.pipe';
 
 describe('CostumeValidationPipe', () => {
   it('should be defined', () => {
